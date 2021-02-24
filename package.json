@@ -1,0 +1,23 @@
+{
+  "name": "sacattendance",
+  "version": "1.0.0",
+  "description": "Version 2 of SAC Attendance System",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XinYang-YXY/sacAttendance.git"
+  },
+  "author": "MakerspaceNYP",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/XinYang-YXY/sacAttendance/issues"
+  },
+  "homepage": "https://github.com/XinYang-YXY/sacAttendance#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.1"
+  }
+}
