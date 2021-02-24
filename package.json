@@ -4,7 +4,8 @@
   "description": "Version 2 of SAC Attendance System",
   "main": "app.js",
   "scripts": {
-    "test": "nodemon app.js"
+    "start": "node app",
+    "test": "nodemon app"
   },
   "repository": {
     "type": "git",
