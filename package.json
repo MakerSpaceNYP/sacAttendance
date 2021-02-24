@@ -22,6 +22,7 @@
     "express-handlebars": "^5.2.1"
   },
   "devDependencies": {
+    "eslint": "^7.20.0",
     "nodemon": "^2.0.7"
   }
 }
