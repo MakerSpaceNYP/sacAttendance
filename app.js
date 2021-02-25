@@ -1,23 +1,41 @@
+// Imports and requires
 const express = require('express')
-require("dotenv").config();
-
-const app = express()
-const port = process.env.PORT || 3000
+const exphbs  = require('express-handlebars');
 var path = require('path');
 const bodyParser = require('body-parser');
 const Airtable = require('airtable');
+require("dotenv").config();
+
+const app = express()
 
 
-// API Key
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY
-
-var base = new Airtable({apiKey: AIRTABLE_API_KEY}).base('app8wtFgcpJCtRHVC');
-
+// Express options
+app.use(express.static(`public`))
 app.use(bodyParser.urlencoded({ extended: true }));
+// app.enable('view cache');
 
-app.get('/', (req,res) => {
-  res.sendFile(path.join(__dirname + '/public/static/templates/index.html'));
-})
+// Handlebars options
+app.engine('hbs', exphbs({
+  defaultLayout: 'main',
+  extname: '.hbs',
+  layoutsDir: `views/layouts/`
+}))
+app.set('view engine', 'hbs')
+app.set('views', `views`)
+
+// Airtable API Key
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY
+const base = new Airtable({apiKey: AIRTABLE_API_KEY}).base('app8wtFgcpJCtRHVC');
+
+// Webserver port
+const port = process.env.PORT || 3000
+
+
+
+// Express routings
+app.get('/', (req, res) => {
+  res.render('index', { layout: 'main' });
+});
 
 app.post('/', (req, res) => {
   const card_id = req.body.card_id
@@ -40,6 +58,7 @@ app.post('/', (req, res) => {
   res.redirect('/')
 })
 
+// Initialise webserver
 app.listen(port, () => {
     console.log(`SAC attandance app listening at http://localhost:${port}`)
 })

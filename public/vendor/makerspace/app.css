@@ -1,0 +1,100 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-align: center;
+    -ms-flex-pack: center;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #fff;
+}
+/* 
+#time-display {
+    letter-spacing:2px;
+} */
+
+.fade {
+    backdrop-filter: blur(10px) saturate(120%);
+}
+
+.modal-lg .modal-content .modal-body {
+    padding: 5rem
+}
+
+/* ------------- */
+.id-card-icon {
+    /* transform: rotate(-20deg); */
+    animation: tapping-animation 1.8s ease-in-out infinite;
+}
+
+.id-card-failed-icon {
+    /* transform: rotate(-20deg); */
+    animation: blink-animation 1.5s ease-in-out infinite;
+}
+
+.id-card-tick-icon {
+    animation: blink-up-animation 1.8s ease infinite;
+}
+
+.id-card-icon-shadow {
+    height: 2rem;
+    width: 8.5rem;
+    background-color: rgba(0,0,0,.18);
+    border-radius: 100%;
+    margin: auto;
+}
+
+@keyframes tapping-animation {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    30% {
+        opacity: 1;
+        transform: translateY(0px) rotate(-20deg)
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(15px) rotate(-20deg)
+    }
+}
+
+
+@keyframes blink-animation {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+
+
+@keyframes blink-up-animation {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-7.5px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+}
