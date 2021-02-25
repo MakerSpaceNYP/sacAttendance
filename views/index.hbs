@@ -41,7 +41,7 @@
 <!-- Failed Modal -->
 {{#if statusSuccessIn}}
 <div class="modal fade" id="scanCardOKInModal" tabindex="-1" role="dialog"
-    aria-hidden="true" style="display: block;">
+    aria-hidden="true" >
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -62,11 +62,14 @@
         </div>
     </div>
 </div>
+<script>
+    $('#scanCardOKInModal').modal('show')
+</script>
 {{/if}}
 
 {{#if statusSuccessOut}}
 <div class="modal fade" id="scanCardOKOutModal" tabindex="-1" role="dialog"
-    aria-hidden="true" style="display: block;">
+    aria-hidden="true" >
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -87,12 +90,15 @@
         </div>
     </div>
 </div>
+<script>
+    $('#scanCardOKOutModal').modal('show')
+</script>
 {{/if}}
 
 <!-- Failed Modal -->
 {{#if statusFail}}
 <div class="modal fade" id="scanCardFailedModal" tabindex="-1" role="dialog"
-    aria-hidden="true" style="display: block;">
+    aria-hidden="true" >
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -114,12 +120,15 @@
         </div>
     </div>
 </div>
+<script>
+    $('#scanCardFailedModal').modal('show')
+</script>
 {{/if}}
 
 <!-- Failed Modal (Already Out) -->
 {{#if statusFailAlreadyOut}}
 <div class="modal fade" id="scanCardAlreadyOutModal" tabindex="-1" role="dialog"
-    aria-hidden="true" style="display: block;">
+    aria-hidden="true" >
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -141,12 +150,15 @@
         </div>
     </div>
 </div>
+<script>
+    $('#statusFailAlreadyOut').modal('show')
+</script>
 {{/if}}
 
 <!-- Failed Modal (Already In) -->
 {{#if statusFailAlreadyIn}}
 <div class="modal fade" id="scanCardAlreadyInModal" tabindex="-1" role="dialog"
-    aria-hidden="true" style="display: block;">
+    aria-hidden="true" >
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -167,4 +179,7 @@
         </div>
     </div>
 </div>
+<script>
+    $('#statusFailAlreadyIn').modal('show')
+</script>
 {{/if}}
