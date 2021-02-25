@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-  const card_id = req.body.card_id
+  const card_id = req.body.cardID
   const checkInDateTime = new Date()
   base('SAC Time Sheet').create([
     {
