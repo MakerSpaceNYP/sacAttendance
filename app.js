@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-  const card_id = req.body.card_id
+  const card_id = req.body.cardID
   const checkInDateTime = new Date()
   base('SAC Time Sheet').create([
     {
@@ -59,5 +59,5 @@ app.post('/', (req, res) => {
 
 // Initialise webserver
 app.listen(port, () => {
-    console.log(`SAC attandance app - neha listening at http://localhost:${port}`)
+    console.log(`SAC attandance app listening at http://localhost:${port}`)
 })
