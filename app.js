@@ -54,7 +54,9 @@ app.post('/', (req, res) => {
       return;
     }
   });
-  res.redirect('/')
+  res.render('index',{
+    'statusSuccessIn': true
+  })
 })
 
 // Initialise webserver
