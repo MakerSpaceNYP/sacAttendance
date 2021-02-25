@@ -55,7 +55,8 @@ app.post('/', (req, res) => {
     }
   });
   res.render('index',{
-    'statusSuccessIn': true
+    'statusSuccessIn': true,
+    'timeLogged': checkInDateTime.toLocaleTimeString()
   })
 })
 
