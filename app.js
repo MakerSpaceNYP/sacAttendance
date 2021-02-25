@@ -48,7 +48,7 @@ app.post('/', (req, res) => {
         "Check In Date-Time": checkInDateTime
       }
     },
-  ], function(err, records) {
+  ], function(err) {
     if (err) {
       console.error(err);
       return;
