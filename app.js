@@ -1,7 +1,6 @@
 // Imports and requires
 const express = require('express')
 const exphbs  = require('express-handlebars');
-// var path = require('path');
 const bodyParser = require('body-parser');
 const Airtable = require('airtable');
 require("dotenv").config();
@@ -50,7 +49,6 @@ app.post('/', (req, res) => {
       }
     },
   ], function(err, records) {
-    records
     if (err) {
       console.error(err);
       return;
