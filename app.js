@@ -20,7 +20,7 @@ app.set('views', `views`)
 const port = 3000
 
 // Express routings
-app.get('/', (req, res, next) => {
+app.get('/', (req, res) => {
   res.render('index', { layout: 'main' });
 });
 
