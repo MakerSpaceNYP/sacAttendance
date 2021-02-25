@@ -1,7 +1,6 @@
 // Imports and requires
 const express = require('express')
 const exphbs  = require('express-handlebars');
-var path = require('path');
 const bodyParser = require('body-parser');
 const Airtable = require('airtable');
 require("dotenv").config();
