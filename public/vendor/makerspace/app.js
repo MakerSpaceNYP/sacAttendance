@@ -28,7 +28,7 @@ setInterval(() => timeDisplay(), 1000)
 
 showLoadingModal = () => {
     $('#scanCardModalInner').fadeOut('fast', () => {
-        $('loadingModalInner').fadeIn('fast')
+        $('#loadingModalInner').fadeIn('fast')
     })
 }
 
