@@ -1,4 +1,4 @@
-setInterval(() => {
+timeDisplay = () => {
     var timestampNow = new Date()
 
     $("#time-display").text(timestampNow.toLocaleTimeString())
@@ -16,7 +16,11 @@ setInterval(() => {
     } else if (curHr < 24) {
         $("#good-day").html(`<i class="fas fa-moon"></i>&ensp;Closed for the day`);
     }
-}, 1000)
+}
+
+timeDisplay()
+
+setInterval(() => timeDisplay(), 1000)
 
 setInterval(() => {
     $('#input-cardID').val("")
