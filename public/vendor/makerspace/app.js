@@ -37,8 +37,8 @@ $(function () {
     });
 });
 
-function timeLogged(){
-    var timestampNow = new Date()
-    $("#timeLogged").text(`Time Logged ${timestampNow.toLocaleTimeString()}`)
-}
-timeLogged()
+// function timeLogged(){
+//     var timestampNow = new Date()
+//     $("#timeLogged").text(`Logged at ${timestampNow.toLocaleTimeString()}`)
+// }
+// timeLogged()
