@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const Airtable = require('airtable');
 require("dotenv").config();
 const app = express()
+const package = require('./package.json')
 
 
 // Express options
@@ -107,6 +108,12 @@ app.post('/', (req, res) => {
         })
     }
     )
+})
+
+app.get('/about', (req, res) => {
+    res.render('about', {
+        'version': package.version 
+    })
 })
 
 
