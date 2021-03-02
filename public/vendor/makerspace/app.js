@@ -26,6 +26,11 @@ setInterval(() => {
     $('#input-cardID').val("")
 }, 500)
 
+showLoadingModal = () => {
+    $('#scanCardModalInner').fadeOut('fast', () => {
+        $('loadingModalInner').fadeIn('fast')
+    })
+}
 
 
 $(function () {

@@ -4,17 +4,18 @@
     <h1 id="time-display" class="display-1">22:00</h1>
 </body> --}}
 
-<div class="jumbotron" style="width: 80vw">
+<div class="jumbotron main" style="width: 80vw">
     <h1 class="display-1" id="time-display" style="font-weight: bold;"></h1>
     <p class="lead" id="good-day" style="font-size: 2rem;"></p>
     <hr>
-    <a onclick="$('#input-cardID').focus()" class="btn btn-primary btn-lg" role="button" data-toggle="modal" data-target="#scanCardModal"><i class="fas fa-briefcase"></i>&ensp;Log shift</a>
+    <a onclick="$('#input-cardID').focus()" class="btn btn-primary btn-lg" role="button" data-toggle="modal"
+        data-target="#scanCardModal"><i class="fas fa-briefcase"></i>&ensp;Log shift</a>
 </div>
 
 <!-- Scan Modal -->
 <div class="modal fade" id="scanCardModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div id="scanCardModalInner" class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Log shift</h5>
@@ -31,17 +32,39 @@
                 <h2><b>Tap your card</b></h2>
                 <p>Please tap your Admin. Card to log your shift</p>
             </div>
-            <form style="z-index: -9999999; opacity: 0; display: absolute" method="POST">
+            <form style="z-index: -9999999; opacity: 0; position: absolute; height: 0px" method="POST"
+                onsubmit="showLoadingModal()">
                 <input type="text" placeholder="Card ID" autocomplete="off" id="input-cardID" name="cardID" required>
             </form>
+        </div>
+    </div>
+    <div id="loadingModalInner" class="modal-dialog modal-dialog-centered modal-lg" role="document"
+        style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Log shift</h5>
+            </div>
+            <div class="modal-body text-center">
+                <div class="display-3" style="display: inline-flex; vertical-align: middle">
+                    <div class="id-card-load-icon">
+                        <i class="fas fa-id-card"></i>&ensp;
+                    </div>
+                    <div class="arrow-icon"><i class="fas fa-arrow-right"></i>&ensp;</div>
+                    <div class="server-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                </div>
+                <br>
+                <h2><b>Loading</b></h2>
+                <p>Please wait as we process your request</p>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Failed Modal -->
 {{#if statusSuccessIn}}
-<div class="modal fade" id="scanCardOKInModal" tabindex="-1" role="dialog"
-    aria-hidden="true" >
+<div class="modal fade" id="scanCardOKInModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -68,8 +91,7 @@
 {{/if}}
 
 {{#if statusSuccessOut}}
-<div class="modal fade" id="scanCardOKOutModal" tabindex="-1" role="dialog"
-    aria-hidden="true" >
+<div class="modal fade" id="scanCardOKOutModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -97,8 +119,7 @@
 
 <!-- Failed Modal -->
 {{#if statusFail}}
-<div class="modal fade" id="scanCardFailedModal" tabindex="-1" role="dialog"
-    aria-hidden="true" >
+<div class="modal fade" id="scanCardFailedModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -127,8 +148,7 @@
 
 <!-- Failed Modal (Already Out) -->
 {{#if statusFailAlreadyOut}}
-<div class="modal fade" id="scanCardAlreadyOutModal" tabindex="-1" role="dialog"
-    aria-hidden="true" >
+<div class="modal fade" id="scanCardAlreadyOutModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -145,7 +165,8 @@
                 <br>
                 <h2 class="text-success"><b>Already signed out</b></h2>
                 <p>Last tap was registered at {{ error.timeDone }}</p>
-                <small>What considers as 'already'?<br><span class="text-black-50">Any card taps in the last 30mins since the previous tap is considered as 'action already performed'.</span></small>
+                <small>What considers as 'already'?<br><span class="text-black-50">Any card taps in the last 30mins
+                        since the previous tap is considered as 'action already performed'.</span></small>
             </div>
         </div>
     </div>
@@ -157,8 +178,7 @@
 
 <!-- Failed Modal (Already In) -->
 {{#if statusFailAlreadyIn}}
-<div class="modal fade" id="scanCardAlreadyInModal" tabindex="-1" role="dialog"
-    aria-hidden="true" >
+<div class="modal fade" id="scanCardAlreadyInModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -174,7 +194,8 @@
                 <br>
                 <h2><b>Already signed in</b></h2>
                 <p>Last tap was registered at {{ error.timeDone }}</p>
-                <small>What considers as 'already'?<br><span class="text-black-50">Any card taps in the last 30mins since the previous tap is considered as 'action already performed'.</span></small>
+                <small>What considers as 'already'?<br><span class="text-black-50">Any card taps in the last 30mins
+                        since the previous tap is considered as 'action already performed'.</span></small>
             </div>
         </div>
     </div>
