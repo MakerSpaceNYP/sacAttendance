@@ -22,9 +22,9 @@ timeDisplay()
 
 setInterval(() => timeDisplay(), 1000)
 
-setInterval(() => {
-    $('#input-cardID').val("")
-}, 500)
+// setInterval(() => {
+//     $('#input-cardID').val("")
+// }, 500)
 
 showLoadingModal = () => {
     $('#scanCardModalInner').fadeOut('fast', () => {
@@ -41,3 +41,9 @@ $(function () {
         $('#input-cardID').focus()
     });
 });
+
+// function timeLogged(){
+//     var timestampNow = new Date()
+//     $("#timeLogged").text(`Logged at ${timestampNow.toLocaleTimeString()}`)
+// }
+// timeLogged()

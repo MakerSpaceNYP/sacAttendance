@@ -36,6 +36,9 @@
                 onsubmit="showLoadingModal()">
                 <input type="text" placeholder="Card ID" autocomplete="off" id="input-cardID" name="cardID" required>
             </form>
+            {{!-- <form style="z-index: 9999999; opacity: 20; display: absolute" method="POST">
+                <input type="text" placeholder="Card ID" autocomplete="off" id="input-cardID" name="cardID" required>
+            </form> --}}
         </div>
     </div>
     <div id="loadingModalInner" class="modal-dialog modal-dialog-centered modal-lg" role="document"
@@ -80,7 +83,7 @@
                 </div>
                 <br>
                 <h2 class="text-success"><b>Shift started</b></h2>
-                <p>Logged at {{ timeLogged }}</p>
+                <p id='timeLogged'>Logged at {{ timeLogged }}</p>
             </div>
         </div>
     </div>
