@@ -1,12 +1,13 @@
 {
   "name": "sacattendance",
-  "version": "1.0.0-2021.03.02-1727h",
+  "version": "1.0.0-2021.03.02-2337h",
   "description": "Version 2 of SAC Attendance System",
   "main": "app.js",
   "scripts": {
     "start": "node app",
     "test": "nodemon app",
-    "eslint-setup": "eslint --init"
+    "eslint-setup": "eslint --init",
+    "push-version": "node scripts/versioning"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "eslint": "^7.20.0",
+    "jsonfile": "^6.1.0",
     "nodemon": "^2.0.7"
   }
 }
