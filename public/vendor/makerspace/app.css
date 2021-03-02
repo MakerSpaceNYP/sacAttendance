@@ -22,7 +22,8 @@ body {
 } */
 
 .fade {
-    backdrop-filter: blur(10px) saturate(120%);
+    /* backdrop-filter: blur(5px); */
+    background-color: rgba(255, 255, 255,.7);
 }
 
 .modal-lg .modal-content .modal-body {
@@ -50,6 +51,50 @@ body {
     background-color: rgba(0,0,0,.18);
     border-radius: 100%;
     margin: auto;
+}
+
+.arrow-icon {
+    animation: move-right 2s ease infinite;
+    padding-bottom: 1rem;
+}
+
+.id-card-load-icon {
+    animation: color-fade 2s ease infinite;
+}
+
+.server-icon {
+    opacity: .25;
+    animation: color-fade 2s ease infinite;
+    animation-delay: 1s;
+}
+
+@keyframes color-fade {
+    0% {
+        opacity: .25;
+        /* transform: translateX(-10px); */
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: .25;
+    }
+}
+
+@keyframes move-right {
+    0% {
+        opacity: 0;
+        /* transform: translateX(-10px); */
+        transform: translateX(-20px);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(10px);
+    }
 }
 
 @keyframes tapping-animation {
@@ -82,8 +127,6 @@ body {
     }
 }
 
-
-
 @keyframes blink-up-animation {
     0% {
         opacity: 0;
@@ -97,4 +140,27 @@ body {
         opacity: 0;
         transform: translateY(-15px);
     }
+}
+/* ------------- */
+
+.main {
+    background: #fff;
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+    border-radius: .8rem;
+    padding: 6rem;
+}
+
+body {
+    background: #fff url('/static/bg.png') repeat scroll;
+    background-size: 50%;
+}
+
+.modal-content {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    padding: 2px;
+    border: none
+}
+
+.modal-header {
+    border-bottom: none;
 }
