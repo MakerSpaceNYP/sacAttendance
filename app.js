@@ -111,8 +111,14 @@ app.post('/', (req, res) => {
 })
 
 app.get('/about', (req, res) => {
+    const timestampNow = new Date()
     res.render('about', {
-        'version': package.version 
+        'version': package.version,
+        'versionNumber': package.version.split('-')[0],
+        'versionTime': package.version.split('-')[2],
+        'versionDate': package.version.split('-')[1],
+        'osName': process.platform,
+        'osTime': timestampNow.toLocaleTimeString()
     })
 })
 
