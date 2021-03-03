@@ -70,6 +70,45 @@ const sacInfo = (cardID, callback, err) => {
     })
 }
 
+// check if card id present
+function idPresent(cardID) {
+    return new Promise((resolve, reject) => {
+        console.log('idPresent Started to run')
+        var start = new Date()
+        let count = 0
+
+
+        // Retrieve from Airtable SAC Information
+        base('SAC Information').select({
+            view: "Grid view"
+        }).eachPage(function page(records, fetchNextPage) {
+            // This function (`page`) will get called for each page of records.
+            records.forEach(function (record) {
+                // Save record into an array
+                if (record.get('Card ID') == cardID) {
+                    resolve({
+                        cardID: record.get('Card ID'),
+                        recordID: record.id
+                    })
+                    console.log('Found the card id')
+                    var end = new Date() - start
+                    console.log('Execution time: %dms', end)
+                    return
+                }
+                else {
+                    count++
+                }
+            });
+            if (count >= records.length) {
+                console.log('Couldnt find the id')
+                reject(new Error('Card ID Cannot Be Found In SAC Information'))
+            }
+            fetchNextPage()
+        })
+    })
+
+}
+
 
 // Express routings
 app.get('/', (req, res) => {
@@ -79,36 +118,61 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
     const card_id = req.body.cardID
-    sacInfo(card_id, () => {
+    async function a(){
+        const b = await idPresent(card_id)
         const checkInDateTime = new Date()
-        const recordId = sacInfoObj[card_id]
         base('SAC Time Sheet').create([
             {
                 "fields": {
-                    "Card ID": card_id,
-                    'SAC_Card_ID': [recordId],
-                    "Check In Date-Time": checkInDateTime
+                    "Card ID": b.cardID,
+                    'SAC_Card_ID': [b.recordID],
+                    "Check In Date-Time": checkInDateTime,
+                    'Status': 'On Shift'
                 }
-            },
-        ], (err) => {
-            if (err) {
-                console.error(err);
-                return;
             }
-        });
+            ])
+        console.log('Clock In Successful')
         res.render('index', {
             'statusSuccessIn': true,
             'timeLogged': checkInDateTime.toLocaleTimeString()
         })
-    }, () => {
-        // If Card ID cannot be found in SAC Information
-        // Feedback: User Not Found
-        res.render('index', {
-            'statusFail': true
-        })
     }
-    )
+    a()
 })
+    
+    //     sacInfo(card_id, () => {
+    //         const checkInDateTime = new Date()
+    //         const recordId = sacInfoObj[card_id]
+    //         base('SAC Time Sheet').create([
+    //             {
+    //                 "fields": {
+    //                     "Card ID": card_id,
+    //                     'SAC_Card_ID': [recordId],
+    //                     "Check In Date-Time": checkInDateTime,
+    //                     'Status': 'On Shift'
+    //                 }
+    //             },
+    //         ], (err) => {
+    //             if (err) {
+    //                 console.error(err);
+    //                 return;
+    //             }
+    //         });
+    //         res.render('index', {
+    //             'statusSuccessIn': true,
+    //             'timeLogged': checkInDateTime.toLocaleTimeString()
+    //         })
+    //     }, () => {
+    //         // If Card ID cannot be found in SAC Information
+    //         // Feedback: User Not Found
+    //         res.render('index', {
+    //             'statusFail': true
+    //         })
+    //     }
+    //     )
+    // }
+    // clockIn()
+// })
 
 app.get('/about', (req, res) => {
     res.render('about', {
