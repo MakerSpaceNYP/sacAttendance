@@ -164,3 +164,8 @@ body {
 .modal-header {
     border-bottom: none;
 }
+
+object.makerspace-mark {
+    height: 3rem;
+    opacity: .15;
+}
