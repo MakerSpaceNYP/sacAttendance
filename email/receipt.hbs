@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', Arial, Helvetica, sans-serif;
+
+            background-color: #fff;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .main-container {
+            display: -ms-flexbox;
+            display: -webkit-box;
+            display: flex;
+            -ms-flex-align: center;
+            -ms-flex-pack: center;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center;
+
+            margin-top: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        .main {
+            width: 30rem;
+            box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+            border-radius: .8rem;
+            padding: 2rem 4rem;
+            padding-bottom: 4rem
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 500
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            margin-top: -1.6rem;
+            color: grey;
+            font-size: 1.3rem;
+        }
+
+        small {
+            color: grey;
+        }
+
+        p {
+            font-size: 1rem;
+        }
+        
+        .receipt-details {
+            background: #000c1d url("https://sac-attendance.azurewebsites.net/static/bg-email.png");
+            background-size: 120%;
+            border-left: solid #0065FF 5px;
+            border-radius: 7px;
+            padding: 2rem;
+        }
+
+        .receipt-details * {
+            color: white;
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+         
+            /*
+              Introduced in IE 10.
+              See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+            */
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .makerspace-mark {
+            opacity: .15;
+            height: 2rem;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid rgb(228, 228, 228);
+        }
+
+        footer {
+            margin-bottom: 4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="main">
+            <h1>Shift clocked out.</h1>
+            <p class="subtitle">Here is your shift receipt. </p>
+            <p>This email serves as a record and proof that you have clocked out from your shift. Shift details is as follows—</p>
+            <div class="receipt-details">
+                <li><b>Name:</b> {{ name }}</li>
+                <li><b>Card ID:</b> {{ cardID }}</li>
+                <li><b>Record UUID:</b> {{ recordID }}</li>
+                <li><b>Clock in:</b> {{ times.clockIn }}</li>
+                <li><b>Clock out:</b> {{ times.clockOut }}</li>
+            </div>
+            <br>
+            <small>➔ If there are any discrepancies, please contact a coach immediately.</small>
+            <p><b>Thank you</b><br>MakerSpaceNYP</p>
+            <hr>
+            <small>This is an automated email sent from an unmonitored email address, please do not reply.</small>
+        </div>
+    </div>
+    <footer>
+        <center>
+            <object class="makerspace-mark"
+                data="http://sac-attendance.azurewebsites.net/static/makerspace-logo.svg"></object>
+        </center>
+    </footer>
+</body>
+
+</html>
