@@ -98,7 +98,7 @@ app.post('/', (req, res) => {
         });
         res.render('index', {
             'statusSuccessIn': true,
-            'timeLogged': checkInDateTime.toLocaleTimeString()
+            'timeLogged': checkInDateTime.toLocaleTimeString('en-US',{ timeZone: 'Asia/Singapore' })
         })
     }, () => {
         // If Card ID cannot be found in SAC Information
