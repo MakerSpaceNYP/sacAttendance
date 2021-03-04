@@ -1,3 +1,7 @@
+* {
+    font-family: 'IBM Plex Sans', Arial, Helvetica, sans-serif;
+}
+
 html, body {
     height: 100%;
 }
