@@ -122,6 +122,39 @@ app.get('/about', (req, res) => {
     })
 })
 
+//Error Codes
+app.use(function (req, res, next) {
+    if (res.status(400)) {
+        res.render('errorCodes', {
+            'errorCode': '400',
+            'errorMessage': 'Its a bad request!'
+        })
+    }
+    else if (res.status(404)) {
+        res.render('errorCodes', {
+            'errorCode': '404',
+            'errorMessage': 'Are you on the right page?'
+        })
+    }
+    else if (res.status(500)) {
+        res.render('errorCodes', {
+            'errorCode': '500',
+            'errorMessage': 'Its a internal server error!'
+        })
+    }
+    else if (res.status(502)) {
+        res.render('errorCodes', {
+            'errorCode': '502',
+            'errorMessage': 'Its a bad gateway!'
+        })
+    }
+    else if (res.status(503)) {
+        res.render('errorCodes', {
+            'errorCode': '503',
+            'errorMessage': 'Service is currently unavailable.'
+        })
+    }
+})
 
 // Initialise webserver
 app.listen(port, () => {
