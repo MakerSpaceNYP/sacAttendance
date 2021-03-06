@@ -41,9 +41,3 @@ $(function () {
         $('#input-cardID').focus()
     });
 });
-
-// function timeLogged(){
-//     var timestampNow = new Date()
-//     $("#timeLogged").text(`Logged at ${timestampNow.toLocaleTimeString()}`)
-// }
-// timeLogged()

@@ -1,9 +1,3 @@
-{{!--
-
-<body class="text-center" data-new-gr-c-s-check-loaded="14.997.0" data-gr-ext-installed="">
-    <h1 id="time-display" class="display-1">22:00</h1>
-</body> --}}
-
 <script defer src="/vendor/makerspace/app.js"></script>
 
 <div class="jumbotron main" style="width: 80vw">
@@ -70,6 +64,10 @@
 
 <!-- Failed Modal -->
 {{#if statusSuccessIn}}
+<script>
+    var audio = new Audio('/static/audio/OK.mp3');
+    audio.play();
+</script>
 <div class="modal fade" id="scanCardOKInModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -97,6 +95,10 @@
 {{/if}}
 
 {{#if statusSuccessOut}}
+<script>
+    var audio = new Audio('/static/audio/OK.mp3');
+    audio.play();
+</script>
 <div class="modal fade" id="scanCardOKOutModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -125,6 +127,10 @@
 
 <!-- Failed Modal -->
 {{#if statusFail}}
+<script>
+    var audio = new Audio('/static/audio/Failed.mp3');
+    audio.play();
+</script>
 <div class="modal fade" id="scanCardFailedModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -154,6 +160,10 @@
 
 <!-- Failed Modal (Already Out) -->
 {{#if statusFailAlreadyOut}}
+<script>
+    var audio = new Audio('/static/audio/Failed.mp3');
+    audio.play();
+</script>
 <div class="modal fade" id="scanCardAlreadyOutModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -184,6 +194,10 @@
 
 <!-- Failed Modal (Already In) -->
 {{#if statusFailAlreadyIn}}
+<script>
+    var audio = new Audio('/static/audio/Failed.mp3');
+    audio.play();
+</script>
 <div class="modal fade" id="scanCardAlreadyInModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
