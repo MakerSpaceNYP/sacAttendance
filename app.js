@@ -35,13 +35,13 @@ const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(baseId);
 // Webserver port
 const port = process.env.PORT || 3000;
 
-let sacInfoObj
+let sacInfoObj;
 
-// Execution time: 900ms
-// Retrieve all SAC Info from SAC Information
+
+// Checks if a card id is present in SAC Information
 const isCardIdPresent = (cardID, callback, err) => {
   /**
-   * Retrieve all SAC Info from SAC Information and store in array
+   * @param {String} cardID - Card id of the card tapped on the card reader
    * @param {Function} callback - Validation Function
    * @param {Function} err - Error message when Card ID cannot be found.
    */
@@ -52,9 +52,7 @@ const isCardIdPresent = (cardID, callback, err) => {
       view: "Grid view",
     })
     .eachPage(function page(records, fetchNextPage) {
-      // This function (`page`) will get called for each page of records.
       records.forEach(function (record) {
-        // Save record into an array
         if (record.get("Card ID") == cardID) {
           sacInfoObj["cardID"] = record.get("Card ID");
           sacInfoObj["recordID"] = record.id;
@@ -72,11 +70,21 @@ const isCardIdPresent = (cardID, callback, err) => {
     });
 };
 
-function isClockedIn(cardID, clockIn, clockOut) {
+function isClockedIn(
+  cardID,
+  clockIn,
+  clockOut,
+  statusFailAlreadyIn,
+  statusFailAlreadyOut,
+  err
+) {
   /**
-   * @param {String} cardID -Card id of the card tapped on the card reader
-   * @param {Function} callback -Function to check if the card id is clocked in or out
-   * @param {Function} err -Error message for repeated clock in
+   * @param {String} cardID - Card id of the card tapped on the card reader
+   * @param {Function} clockIn - Function to clock SAC In
+   * @param {Function} clockOut - Function to clock SAC Out
+   * @param {Function} statusfailAlreadyIn - Function to throw error message if SAC trys to clock in within 1 min
+   * @param {Function} statusfailAlreadyout - Function to throw error message if SAC trys to clock Out within 1 min
+   * @param {Function} err - Error message for repeated clock in
    */
 
   let count = 0;
@@ -91,34 +99,71 @@ function isClockedIn(cardID, clockIn, clockOut) {
     .eachPage(function page(records, fetchNextPage) {
       records.every(function (record) {
         let recordDate = record.get("Check In Date-Time")?.split("T")[0];
-        // Clock Out
         if (record.get("Card ID") == cardID) {
-          console.log(record.get("Check Out Date-Time") == null);
+          // Clock Out
           if (
             recordDate == todayDate &&
-            // new Date() - record.get("Check In Date-Time") >= 60000 &&
+            Date.parse(new Date()) -
+              Date.parse(record.get("Check In Date-Time")) >=
+              60000 &&
             record.get("Check Out Date-Time") == null
           ) {
             console.log("Clock Out");
             const clockOutRecordId = record.id;
             clockOut(clockOutRecordId);
             return false;
+
+            // Render Clock In Duplicate template
+          } else if (
+            recordDate == todayDate &&
+            Date.parse(new Date()) -
+              Date.parse(record.get("Check In Date-Time")) <
+              60000 &&
+            record.get("Check Out Date-Time") == null
+          ) {
+            statusFailAlreadyIn();
+            return false;
           }
+
           // Clock In
-          else {
-            console.log("Clock In 1");
+          else if (
+            recordDate == todayDate &&
+            record.get("Check Out Date-Time") != null &&
+            Date.parse(new Date()) -
+              Date.parse(record.get("Check Out Date-Time")) >=
+              60000
+          ) {
             clockIn();
             return false;
+          }
+
+          // Render Clock Out Duplicate template
+          else if (
+            recordDate == todayDate &&
+            record.get("Check Out Date-Time") != null &&
+            Date.parse(new Date()) -
+              Date.parse(record.get("Check Out Date-Time")) <
+              60000
+          ) {
+            statusFailAlreadyOut();
+          }
+
+          // Unknown Error
+          else {
+            err();
           }
         } else {
           count++;
         }
       });
+
+      //   No records in the SAC Time Sheet yet
       if (count >= records.length) {
         console.log("Clock In 2");
         clockIn();
         return false;
       }
+
       fetchNextPage();
     });
 }
@@ -150,35 +195,71 @@ app.post("/", (req, res) => {
           ]);
           console.log("Clock In Successful");
           // Render Clock In Success template
-          res.render('index', {
-            'statusSuccessIn': true,
-            'timeLogged': checkInDateTime.toLocaleTimeString('en-US',{ timeZone: 'Asia/Singapore' })
-        })
+          res.render("index", {
+            statusSuccessIn: true,
+            timeLogged: checkInDateTime.toLocaleTimeString("en-US", {
+              timeZone: "Asia/Singapore",
+            }),
+          });
           return;
         },
         // Clock Out Function
         (clockOutRecordId) => {
           const checkOutDateTime = new Date();
-          base("SAC Time Sheet").update([
-            {
-              id: clockOutRecordId,
-              fields: {
-                "Check Out Date-Time": checkOutDateTime,
+          base("SAC Time Sheet").update(
+            [
+              {
+                id: clockOutRecordId,
+                fields: {
+                  "Check Out Date-Time": checkOutDateTime,
+                },
               },
-            },
-            
-          ], function(err) {
-            if (err) {
-              console.error(err);
-              return;
+            ],
+            function (err) {
+              if (err) {
+                console.error(err);
+                return;
+              }
             }
-        });
+          );
           // Render Clock In Success template
-          res.render('index', {
-            'statusSuccessOut': true,
-            'timeLogged': checkOutDateTime.toLocaleTimeString('en-US',{ timeZone: 'Asia/Singapore' })
-        })
+          res.render("index", {
+            statusSuccessOut: true,
+            timeLogged: checkOutDateTime.toLocaleTimeString("en-US", {
+              timeZone: "Asia/Singapore",
+            }),
+          });
           return;
+        },
+        // Status Failed Already In
+        () => {
+          const errorTime = new Date();
+          res.render("index", {
+            statusFailAlreadyIn: true,
+            error: {
+              timeDone: errorTime.toLocaleTimeString("en-US", {
+                timeZone: "Asia/Singapore",
+              }),
+            },
+          });
+        },
+        // Status Failed Already Out
+        () => {
+          const errorTime = new Date();
+          res.render("index", {
+            statusFailAlreadyOut: true,
+            error: {
+              timeDone: errorTime.toLocaleTimeString("en-US", {
+                timeZone: "Asia/Singapore",
+              }),
+            },
+          });
+        },
+        // Unknown Error
+        () => {
+          res.render("index", {
+            statusFail: true,
+          });
         }
       );
     },
@@ -191,51 +272,47 @@ app.post("/", (req, res) => {
   );
 });
 
-app.get('/about', (req, res) => {
-    const timestampNow = new Date()
-    res.render('about', {
-        'version': package.version,
-        'versionNumber': package.version.split('-')[0],
-        'versionTime': package.version.split('-')[2],
-        'versionDate': package.version.split('-')[1],
-        'osName': process.platform,
-        'osTime': timestampNow.toLocaleTimeString()
-    })
-})
+app.get("/about", (req, res) => {
+  const timestampNow = new Date();
+  res.render("about", {
+    version: package.version,
+    versionNumber: package.version.split("-")[0],
+    versionTime: package.version.split("-")[2],
+    versionDate: package.version.split("-")[1],
+    osName: process.platform,
+    osTime: timestampNow.toLocaleTimeString(),
+  });
+});
 
 //Error Codes
 app.use(function (req, res, next) {
-    if (res.status(400)) {
-        res.render('errorCodes', {
-            'errorCode': '400',
-            'errorMessage': 'Its a bad request!'
-        })
-    }
-    else if (res.status(404)) {
-        res.render('errorCodes', {
-            'errorCode': '404',
-            'errorMessage': 'Are you on the right page?'
-        })
-    }
-    else if (res.status(500)) {
-        res.render('errorCodes', {
-            'errorCode': '500',
-            'errorMessage': 'Its a internal server error!'
-        })
-    }
-    else if (res.status(502)) {
-        res.render('errorCodes', {
-            'errorCode': '502',
-            'errorMessage': 'Its a bad gateway!'
-        })
-    }
-    else if (res.status(503)) {
-        res.render('errorCodes', {
-            'errorCode': '503',
-            'errorMessage': 'Service is currently unavailable.'
-        })
-    }
-})
+  if (res.status(400)) {
+    res.render("errorCodes", {
+      errorCode: "400",
+      errorMessage: "Its a bad request!",
+    });
+  } else if (res.status(404)) {
+    res.render("errorCodes", {
+      errorCode: "404",
+      errorMessage: "Are you on the right page?",
+    });
+  } else if (res.status(500)) {
+    res.render("errorCodes", {
+      errorCode: "500",
+      errorMessage: "Its a internal server error!",
+    });
+  } else if (res.status(502)) {
+    res.render("errorCodes", {
+      errorCode: "502",
+      errorMessage: "Its a bad gateway!",
+    });
+  } else if (res.status(503)) {
+    res.render("errorCodes", {
+      errorCode: "503",
+      errorMessage: "Service is currently unavailable.",
+    });
+  }
+});
 
 // Initialise webserver
 app.listen(port, () => {
