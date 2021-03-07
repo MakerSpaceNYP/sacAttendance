@@ -35,6 +35,8 @@ const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(baseId);
 // Webserver port
 const port = process.env.PORT || 3000;
 
+let sacInfoObj
+
 // Execution time: 900ms
 // Retrieve all SAC Info from SAC Information
 const isCardIdPresent = (cardID, callback, err) => {
@@ -44,7 +46,7 @@ const isCardIdPresent = (cardID, callback, err) => {
    * @param {Function} err - Error message when Card ID cannot be found.
    */
   let count = 0;
-  let sacInfoObj = {};
+  sacInfoObj = {};
   base("SAC Information")
     .select({
       view: "Grid view",
@@ -56,7 +58,7 @@ const isCardIdPresent = (cardID, callback, err) => {
         if (record.get("Card ID") == cardID) {
           sacInfoObj["cardID"] = record.get("Card ID");
           sacInfoObj["recordID"] = record.id;
-          callback();
+          callback(sacInfoObj);
           return;
         } else {
           count++;
@@ -98,7 +100,6 @@ function isClockedIn(cardID, clockIn, clockOut) {
             record.get("Check Out Date-Time") == null
           ) {
             console.log("Clock Out");
-            console.log()
             const clockOutRecordId = record.id;
             clockOut(clockOutRecordId);
             return false;
@@ -166,7 +167,7 @@ app.post("/", (req, res) => {
               },
             },
             
-          ], function(err, records) {
+          ], function(err) {
             if (err) {
               console.error(err);
               return;
