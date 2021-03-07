@@ -44,7 +44,7 @@ const isCardIdPresent = (cardID, callback, err) => {
    * @param {Function} err - Error message when Card ID cannot be found.
    */
   let count = 0;
-  sacInfoObj = {};
+  let sacInfoObj = {};
   base("SAC Information")
     .select({
       view: "Grid view",
