@@ -149,10 +149,10 @@ app.post("/", (req, res) => {
           ]);
           console.log("Clock In Successful");
           // Render Clock In Success template
-          res.render("index", {
-            statusSuccessIn: true,
-            timeLogged: checkInDateTime.toLocaleTimeString(),
-          });
+          res.render('index', {
+            'statusSuccessIn': true,
+            'timeLogged': checkInDateTime.toLocaleTimeString('en-US',{ timeZone: 'Asia/Singapore' })
+        })
           return;
         },
         // Clock Out Function
@@ -172,15 +172,11 @@ app.post("/", (req, res) => {
               return;
             }
         });
-        res.render('index', {
-            'statusSuccessIn': true,
-            'timeLogged': checkInDateTime.toLocaleTimeString('en-US',{ timeZone: 'Asia/Singapore' })
-        })
           // Render Clock In Success template
-          res.render("index", {
-            statusSuccessOut: true,
-            timeLogged: checkOutDateTime.toLocaleTimeString(),
-          });
+          res.render('index', {
+            'statusSuccessOut': true,
+            'timeLogged': checkOutDateTime.toLocaleTimeString('en-US',{ timeZone: 'Asia/Singapore' })
+        })
           return;
         }
       );
@@ -192,27 +188,6 @@ app.post("/", (req, res) => {
       });
     }
   );
-  // const card_id = req.body.cardID
-  // async function a(){
-  //     const b = await idPresent(card_id)
-  //     const checkInDateTime = new Date()
-  //     base('SAC Time Sheet').create([
-  //         {
-  //             "fields": {
-  //                 "Card ID": b.cardID,
-  //                 'SAC_Card_ID': [b.recordID],
-  //                 "Check In Date-Time": checkInDateTime,
-  //                 'Status': 'On Shift'
-  //             }
-  //         }
-  //         ])
-  //     console.log('Clock In Successful')
-  //     res.render('index', {
-  //         'statusSuccessIn': true,
-  //         'timeLogged': checkInDateTime.toLocaleTimeString()
-  //     })
-  // }
-  // a()
 });
 
 app.get('/about', (req, res) => {
