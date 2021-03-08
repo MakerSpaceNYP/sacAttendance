@@ -32,14 +32,20 @@ const baseId = process.env.AIRTABLE_BASE_ID || "app8wtFgcpJCtRHVC";
 
 const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(baseId);
 
+// Sendgrid API Key
+const sgMail = require("@sendgrid/mail");
+const { send } = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 // Webserver port
 const port = process.env.PORT || 3000;
 
 let sacInfoObj;
+let clockOutDetailsObj;
 
 
 // Checks if a card id is present in SAC Information
-const isCardIdPresent = (cardID, callback, err) => {
+function isCardIdPresent(cardID, callback, err) {
   /**
    * @param {String} cardID - Card id of the card tapped on the card reader
    * @param {Function} callback - Validation Function
@@ -68,12 +74,13 @@ const isCardIdPresent = (cardID, callback, err) => {
       }
       fetchNextPage();
     });
-};
+}
 
 function isClockedIn(
   cardID,
   clockIn,
   clockOut,
+  callback,
   statusFailAlreadyIn,
   statusFailAlreadyOut,
   err
@@ -100,17 +107,22 @@ function isClockedIn(
       records.every(function (record) {
         let recordDate = record.get("Check In Date-Time")?.split("T")[0];
         if (record.get("Card ID") == cardID) {
-          // Clock Out
+          // Clock Out Success
           if (
             recordDate == todayDate &&
             Date.parse(new Date()) -
               Date.parse(record.get("Check In Date-Time")) >=
-              60000 &&
+              6000 &&
             record.get("Check Out Date-Time") == null
           ) {
-            console.log("Clock Out");
             const clockOutRecordId = record.id;
-            clockOut(clockOutRecordId);
+            clockOutDetailsObj = {
+              sacName: record.get("SAC Name"),
+              adminNo: record.get("Admin Number"),
+              cardID: record.get("Card ID"),
+              clockInTime: record.get("Check In Date-Time"),
+            };
+            clockOut(clockOutRecordId, clockOutDetailsObj);
             return false;
 
             // Render Clock In Duplicate template
@@ -118,20 +130,20 @@ function isClockedIn(
             recordDate == todayDate &&
             Date.parse(new Date()) -
               Date.parse(record.get("Check In Date-Time")) <
-              60000 &&
+              6000 &&
             record.get("Check Out Date-Time") == null
           ) {
             statusFailAlreadyIn();
             return false;
           }
 
-          // Clock In
+          // Clock In Sucess
           else if (
             recordDate == todayDate &&
             record.get("Check Out Date-Time") != null &&
             Date.parse(new Date()) -
               Date.parse(record.get("Check Out Date-Time")) >=
-              60000
+              6000
           ) {
             clockIn();
             return false;
@@ -143,7 +155,7 @@ function isClockedIn(
             record.get("Check Out Date-Time") != null &&
             Date.parse(new Date()) -
               Date.parse(record.get("Check Out Date-Time")) <
-              60000
+              6000
           ) {
             statusFailAlreadyOut();
           }
@@ -204,7 +216,7 @@ app.post("/", (req, res) => {
           return;
         },
         // Clock Out Function
-        (clockOutRecordId) => {
+        (clockOutRecordId, clockOutDetailsObj) => {
           const checkOutDateTime = new Date();
           base("SAC Time Sheet").update(
             [
@@ -219,10 +231,32 @@ app.post("/", (req, res) => {
               if (err) {
                 console.error(err);
                 return;
+              } else {
+                // Send Email
+                const msg = {
+                  to: `${clockOutDetailsObj.adminNo}@mymail.nyp.edu.sg`,
+                  from: "account@fishpain.net",
+                  subject: "Sending with SendGrid is Fun",
+                  text: 
+                  `Name: ${clockOutDetailsObj.sacName[0]},
+                  Admin Number: ${clockOutDetailsObj.adminNo[0]},
+                  card ID: ${clockOutDetailsObj.cardID},
+                  record ID: ${clockOutRecordId},
+                  clock in time: ${clockOutDetailsObj.clockInTime},
+                  clock out time: ${checkOutDateTime}`,
+                };
+                sgMail
+                  .send(msg)
+                  .then(() => {
+                    console.log(msg);
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
               }
             }
           );
-          // Render Clock In Success template
+          // Render Clock Out Success template
           res.render("index", {
             statusSuccessOut: true,
             timeLogged: checkOutDateTime.toLocaleTimeString("en-US", {
