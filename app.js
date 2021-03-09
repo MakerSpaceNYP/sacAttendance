@@ -120,7 +120,7 @@ function isClockedIn(
         })
         .eachPage(function page(records, fetchNextPage) {
             records.every(function (record) {
-                let recordDate = record.get("Check In Date-Time")?.split("T")[0];
+                let recordDate = record.get("Check In Date-Time").split("T")[0];
                 if (record.get("Card ID") == cardID) {
                     // Clock Out Success
                     if (
