@@ -258,7 +258,7 @@ app.post("/", (req, res) => {
                                 }
                             }
 
-                            var message = template(data);
+                            var message = receiptTemplate(data);
 
                             transporter.sendMail({
                                 from: process.env.MAIL_FROM,
