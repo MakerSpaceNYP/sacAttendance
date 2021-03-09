@@ -32,10 +32,25 @@ const baseId = process.env.AIRTABLE_BASE_ID || "app8wtFgcpJCtRHVC";
 
 const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(baseId);
 
-// Sendgrid API Key
-const sgMail = require("@sendgrid/mail");
-const { send } = require("@sendgrid/mail");
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Nodemailer
+const nodemailer = require('nodemailer')
+const transporter = nodemailer.createTransport({
+  host: 'smtp.sendgrid.net',
+  port: 587,
+  auth: {
+    user: 'apikey',
+    pass: process.env.SENDGRID_API_KEY
+  }
+});
+
+// Handlebars
+const Handlebars = require("handlebars")
+
+// Email Template
+const fs = require('fs')
+const receiptTemplateSource = fs.readFileSync(`./email/receipt.hbs`, 'utf8')
+const receiptTemplate = Handlebars.compile(receiptTemplateSource)
+
 
 // Webserver port
 const port = process.env.PORT || 3000;
@@ -111,8 +126,8 @@ function isClockedIn(
           if (
             recordDate == todayDate &&
             Date.parse(new Date()) -
-              Date.parse(record.get("Check In Date-Time")) >=
-              6000 &&
+            Date.parse(record.get("Check In Date-Time")) >=
+            6000 &&
             record.get("Check Out Date-Time") == null
           ) {
             const clockOutRecordId = record.id;
@@ -129,8 +144,8 @@ function isClockedIn(
           } else if (
             recordDate == todayDate &&
             Date.parse(new Date()) -
-              Date.parse(record.get("Check In Date-Time")) <
-              6000 &&
+            Date.parse(record.get("Check In Date-Time")) <
+            6000 &&
             record.get("Check Out Date-Time") == null
           ) {
             statusFailAlreadyIn();
@@ -142,8 +157,8 @@ function isClockedIn(
             recordDate == todayDate &&
             record.get("Check Out Date-Time") != null &&
             Date.parse(new Date()) -
-              Date.parse(record.get("Check Out Date-Time")) >=
-              6000
+            Date.parse(record.get("Check Out Date-Time")) >=
+            6000
           ) {
             clockIn();
             return false;
@@ -154,8 +169,8 @@ function isClockedIn(
             recordDate == todayDate &&
             record.get("Check Out Date-Time") != null &&
             Date.parse(new Date()) -
-              Date.parse(record.get("Check Out Date-Time")) <
-              6000
+            Date.parse(record.get("Check Out Date-Time")) <
+            6000
           ) {
             statusFailAlreadyOut();
           }
@@ -231,32 +246,26 @@ app.post("/", (req, res) => {
               if (err) {
                 console.error(err);
                 return;
-              } else {
-                // Send Email
-                const msg = {
-                  to: `${clockOutDetailsObj.adminNo}@mymail.nyp.edu.sg`,
-                  from: "account@fishpain.net",
-                  subject: "SAC Shift Ended.",
-                  text: 
-                  `Name: ${clockOutDetailsObj.sacName[0]},
-                  Admin Number: ${clockOutDetailsObj.adminNo[0]},
-                  card ID: ${clockOutDetailsObj.cardID},
-                  record ID: ${clockOutRecordId},
-                  clock in time: ${clockOutDetailsObj.clockInTime},
-                  clock out time: ${checkOutDateTime}`,
-                  // Insert html format below. the above is the values that you need. 
-                  // For clock in time, I have not yet changed it from ISO string to local time. Can you help to do that too?
-                  html: '[INSERT HERE]'
-                };
-                sgMail
-                  .send(msg)
-                  .then(() => {
-                    console.log(msg);
-                  })
-                  .catch((error) => {
-                    console.error(error);
-                  });
               }
+
+              var data = {
+                name: clockOutDetailsObj.sacName[0],
+                cardID: clockOutDetailsObj.adminNo[0],
+                recordID:clockOutRecordId,
+                times: {
+                  clockIn: clockOutDetailsObj.clockInTime,
+                  clockOut: checkOutDateTime
+                }
+              }
+
+              var message = template(data);
+
+              transporter.sendMail({
+                from: process.env.MAIL_FROM,
+                to: email,
+                subject: 'MakerSpaceNYP - Your shift receipt',
+                html: message
+              });
             }
           );
           // Render Clock Out Success template
