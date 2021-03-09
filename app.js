@@ -236,7 +236,7 @@ app.post("/", (req, res) => {
                 const msg = {
                   to: `${clockOutDetailsObj.adminNo}@mymail.nyp.edu.sg`,
                   from: "account@fishpain.net",
-                  subject: "Sending with SendGrid is Fun",
+                  subject: "SAC Shift Ended.",
                   text: 
                   `Name: ${clockOutDetailsObj.sacName[0]},
                   Admin Number: ${clockOutDetailsObj.adminNo[0]},
@@ -244,6 +244,9 @@ app.post("/", (req, res) => {
                   record ID: ${clockOutRecordId},
                   clock in time: ${clockOutDetailsObj.clockInTime},
                   clock out time: ${checkOutDateTime}`,
+                  // Insert html format below. the above is the values that you need. 
+                  // For clock in time, I have not yet changed it from ISO string to local time. Can you help to do that too?
+                  html: '[INSERT HERE]'
                 };
                 sgMail
                   .send(msg)
