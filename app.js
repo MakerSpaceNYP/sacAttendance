@@ -55,8 +55,7 @@ const receiptTemplate = Handlebars.compile(receiptTemplateSource)
 // Webserver port
 const port = process.env.PORT || 3000;
 
-let sacInfoObj;
-let clockOutDetailsObj;
+let sacInfoObj, clockOutDetailsObj, data
 
 
 // Checks if a card id is present in SAC Information
@@ -247,10 +246,12 @@ app.post("/", (req, res) => {
                                 console.error(err);
                                 return;
                             }
-
-                            var data = {
+                        
+                            
+                            data = {
                                 name: clockOutDetailsObj.sacName[0],
-                                cardID: clockOutDetailsObj.adminNo[0],
+                                cardID: clockOutDetailsObj.cardID,
+								adminNo: clockOutDetailsObj.adminNo[0],
                                 recordID: clockOutRecordId,
                                 times: {
                                     clockIn: clockOutDetailsObj.clockInTime,
@@ -258,15 +259,26 @@ app.post("/", (req, res) => {
                                 }
                             }
 
+							console.log(clockOutDetailsObj.sacName[0])
+                            console.log(clockOutDetailsObj.adminNo[0])
+                            console.log(clockOutRecordId)
+                            console.log(clockOutDetailsObj.clockInTime)
+							console.log(checkOutDateTime)
+
                             var message = receiptTemplate(data);
 
+							console.log('here')
                             transporter.sendMail({
                                 from: process.env.MAIL_FROM,
-                                to: email,
+                                to: `${clockOutDetailsObj.adminNo[0]}@mymail.nyp.edu.sg`,
                                 subject: 'MakerSpaceNYP - Your shift receipt',
                                 html: message
-                            });
-                        }
+                            })
+							.catch(err=>{
+								console.log(err)
+							});
+						}
+                        
                     );
                     // Render Clock Out Success template
                     res.render("index", {
@@ -363,4 +375,4 @@ app.use(function (req, res, next) {
 // Initialise webserver
 app.listen(port, () => {
     console.log(`SAC attandance app listening at http://localhost:${port}`);
-});
+})
