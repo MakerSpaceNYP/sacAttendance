@@ -206,108 +206,76 @@ app.post("/", (req, res) => {
         (cardID = card_id),
         // Card present in SAC Information
         () => {
-            isClockedIn(
-                (cardID = card_id),
-                // Clock In Function
-                () => {
-                    const checkInDateTime = new Date();
-                    base("SAC Time Sheet").create([
-                        {
-                            fields: {
-                                "Card ID": sacInfoObj.cardID,
-                                SAC_Card_ID: [sacInfoObj.recordID],
-                                "Check In Date-Time": checkInDateTime,
-                            },
-                        },
-                    ]);
-                    console.log("Clock In Successful");
-                    // Render Clock In Success template
-                    res.render("index", {
-                        statusSuccessIn: true,
-                        timeLogged: checkInDateTime.toLocaleTimeString("en-US", {
-                            timeZone: "Asia/Singapore",
-                        }),
-                    });
-                    return;
+          const checkInDateTime = new Date();
+          base("SAC Time Sheet").create([
+            {
+              fields: {
+                "Card ID": sacInfoObj.cardID,
+                SAC_Card_ID: [sacInfoObj.recordID],
+                "Check In Date-Time": checkInDateTime,
+              },
+            },
+          ]);
+          // Render Clock In Success template
+          res.render("index", {
+            statusSuccessIn: true,
+            timeLogged: checkInDateTime.toLocaleTimeString("en-US", {
+              timeZone: "Asia/Singapore",
+            }),
+          });
+          console.log("Clock In Successful");
+        },
+        // Clock Out Function
+        (clockOutRecordId, clockOutDetailsObj) => {
+          const checkOutDateTime = new Date();
+          base("SAC Time Sheet").update(
+            [
+              {
+                id: clockOutRecordId,
+                fields: {
+                  "Check Out Date-Time": checkOutDateTime,
                 },
-                // Clock Out Function
-                (clockOutRecordId, clockOutDetailsObj) => {
-                    const checkOutDateTime = new Date();
-                    base("SAC Time Sheet").update(
-                        [
-                            {
-                                id: clockOutRecordId,
-                                fields: {
-                                    "Check Out Date-Time": checkOutDateTime,
-                                },
-                            },
-                        ],
-                        function (err) {
-                            if (err) {
-                                console.error(err);
-                                return;
-                            }
-
-                            var data = {
-                                name: clockOutDetailsObj.sacName[0],
-                                cardID: clockOutDetailsObj.adminNo[0],
-                                recordID: clockOutRecordId,
-                                times: {
-                                    clockIn: clockOutDetailsObj.clockInTime,
-                                    clockOut: checkOutDateTime
-                                }
-                            }
-
-                            var message = template(data);
-
-                            transporter.sendMail({
-                                from: process.env.MAIL_FROM,
-                                to: email,
-                                subject: 'MakerSpaceNYP - Your shift receipt',
-                                html: message
-                            });
-                        }
-                    );
-                    // Render Clock Out Success template
-                    res.render("index", {
-                        statusSuccessOut: true,
-                        timeLogged: checkOutDateTime.toLocaleTimeString("en-US", {
-                            timeZone: "Asia/Singapore",
-                        }),
-                    });
-                    return;
-                },
-                // Status Failed Already In
-                () => {
-                    const errorTime = new Date();
-                    res.render("index", {
-                        statusFailAlreadyIn: true,
-                        error: {
-                            timeDone: errorTime.toLocaleTimeString("en-US", {
-                                timeZone: "Asia/Singapore",
-                            }),
-                        },
-                    });
-                },
-                // Status Failed Already Out
-                () => {
-                    const errorTime = new Date();
-                    res.render("index", {
-                        statusFailAlreadyOut: true,
-                        error: {
-                            timeDone: errorTime.toLocaleTimeString("en-US", {
-                                timeZone: "Asia/Singapore",
-                            }),
-                        },
-                    });
-                },
-                // Unknown Error
-                () => {
-                    res.render("index", {
-                        statusFail: true,
-                    });
-                }
-            );
+              },
+            ],
+            function (err) {
+              if (err) {
+                console.error(err);
+                return;
+              } else {
+                // Send Email
+                const msg = {
+                  to: `${clockOutDetailsObj.adminNo}@mymail.nyp.edu.sg`,
+                  from: "account@fishpain.net",
+                  subject: "SAC Shift Ended.",
+                  text: 
+                  `Name: ${clockOutDetailsObj.sacName[0]},
+                  Admin Number: ${clockOutDetailsObj.adminNo[0]},
+                  card ID: ${clockOutDetailsObj.cardID},
+                  record ID: ${clockOutRecordId},
+                  clock in time: ${clockOutDetailsObj.clockInTime},
+                  clock out time: ${checkOutDateTime}`,
+                  // Insert html format below. the above is the values that you need. 
+                  // For clock in time, I have not yet changed it from ISO string to local time. Can you help to do that too?
+                };
+                sgMail
+                  .send(msg)
+                  .then(() => {
+                    console.log(msg);
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              }
+            }
+          );
+          // Render Clock Out Success template
+          res.render("index", {
+            statusSuccessOut: true,
+            timeLogged: checkOutDateTime.toLocaleTimeString("en-US", {
+              timeZone: "Asia/Singapore",
+            }),
+          });
+          return;
         },
         // Error: Cannot Read Card
         () => {
