@@ -118,8 +118,9 @@ function isClockedIn(
             sort: [{ field: "Check In Date-Time", direction: "desc" }],
         })
         .eachPage(function page(records, fetchNextPage) {
-            records.every(function (record) {
+            records.forEach(function (record) {
                 let recordDate = record.get("Check In Date-Time")?.split("T")[0];
+                console.log(record.get("Card ID") == cardID)
                 if (record.get("Card ID") == cardID) {
                     // Clock Out Success
                     if (
@@ -129,6 +130,7 @@ function isClockedIn(
                         6000 &&
                         record.get("Check Out Date-Time") == null
                     ) {
+                        clockOutDetailsObj={}
                         const clockOutRecordId = record.id;
                         clockOutDetailsObj = {
                             sacName: record.get("SAC Name"),
@@ -137,7 +139,7 @@ function isClockedIn(
                             clockInTime: record.get("Check In Date-Time"),
                         };
                         clockOut(clockOutRecordId, clockOutDetailsObj);
-                        return false;
+                        return ;
 
                         // Render Clock In Duplicate template
                     } else if (
@@ -148,7 +150,7 @@ function isClockedIn(
                         record.get("Check Out Date-Time") == null
                     ) {
                         statusFailAlreadyIn();
-                        return false;
+                        return;
                     }
 
                     // Clock In Sucess
@@ -160,7 +162,7 @@ function isClockedIn(
                         6000
                     ) {
                         clockIn();
-                        return false;
+                        return;
                     }
 
                     // Render Clock Out Duplicate template
@@ -267,7 +269,6 @@ app.post("/", (req, res) => {
 
                             var message = receiptTemplate(data);
 
-							console.log('here')
                             transporter.sendMail({
                                 from: process.env.MAIL_FROM,
                                 to: `${clockOutDetailsObj.adminNo[0]}@mymail.nyp.edu.sg`,
