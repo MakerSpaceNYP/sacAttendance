@@ -118,7 +118,7 @@ function isClockedIn(
             sort: [{ field: "Check In Date-Time", direction: "desc" }],
         })
         .eachPage(function page(records, fetchNextPage) {
-            records.forEach(function (record) {
+            records.some(function (record) {
                 let recordDate = record.get("Check In Date-Time")?.split("T")[0];
                 console.log(record.get("Card ID") == cardID)
                 if (record.get("Card ID") == cardID) {
@@ -127,9 +127,10 @@ function isClockedIn(
                         recordDate == todayDate &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check In Date-Time")) >=
-                        6000 &&
+                        60000 &&
                         record.get("Check Out Date-Time") == null
                     ) {
+                        console.log('Clock Out')
                         clockOutDetailsObj={}
                         const clockOutRecordId = record.id;
                         clockOutDetailsObj = {
@@ -139,18 +140,19 @@ function isClockedIn(
                             clockInTime: record.get("Check In Date-Time"),
                         };
                         clockOut(clockOutRecordId, clockOutDetailsObj);
-                        return ;
+                        return true
 
                         // Render Clock In Duplicate template
                     } else if (
                         recordDate == todayDate &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check In Date-Time")) <
-                        6000 &&
+                        60000 &&
                         record.get("Check Out Date-Time") == null
                     ) {
                         statusFailAlreadyIn();
-                        return;
+                        return true
+
                     }
 
                     // Clock In Sucess
@@ -159,10 +161,12 @@ function isClockedIn(
                         record.get("Check Out Date-Time") != null &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check Out Date-Time")) >=
-                        6000
+                        60000
                     ) {
+                        console.log('Clock')
                         clockIn();
-                        return;
+                        return true
+
                     }
 
                     // Render Clock Out Duplicate template
@@ -171,14 +175,18 @@ function isClockedIn(
                         record.get("Check Out Date-Time") != null &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check Out Date-Time")) <
-                        6000
+                        60000
                     ) {
                         statusFailAlreadyOut();
+                        return true
+
                     }
 
                     // Unknown Error
                     else {
                         err();
+                        return true
+
                     }
                 } else {
                     count++;
