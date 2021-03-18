@@ -33,15 +33,20 @@ const baseId = process.env.AIRTABLE_BASE_ID || "app8wtFgcpJCtRHVC";
 const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(baseId);
 
 // Nodemailer
-const nodemailer = require('nodemailer')
-const transporter = nodemailer.createTransport({
-    host: 'smtp.sendgrid.net',
-    port: 587,
-    auth: {
-        user: 'apikey',
-        pass: process.env.SENDGRID_API_KEY
-    }
-});
+// const nodemailer = require('nodemailer')
+// const transporter = nodemailer.createTransport({
+//     host: 'smtp.sendgrid.net',
+//     port: 587,
+//     auth: {
+//         user: 'apikey',
+//         pass: process.env.SENDGRID_API_KEY
+//     }
+// });
+
+// Sendgrid API Key
+const sgMail = require("@sendgrid/mail");
+const { send } = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Handlebars
 const Handlebars = require("handlebars")
@@ -226,6 +231,7 @@ app.post("/", (req, res) => {
                                 "Card ID": sacInfoObj.cardID,
                                 SAC_Card_ID: [sacInfoObj.recordID],
                                 "Check In Date-Time": checkInDateTime,
+                                Status : 'On Shift'
                             },
                         },
                     ]);
@@ -248,6 +254,7 @@ app.post("/", (req, res) => {
                                 id: clockOutRecordId,
                                 fields: {
                                     "Check Out Date-Time": checkOutDateTime,
+                                    Status : 'Shift End'
                                 },
                             },
                         ],
@@ -277,15 +284,13 @@ app.post("/", (req, res) => {
 
                             var message = receiptTemplate(data);
 
-                            transporter.sendMail({
-                                from: process.env.MAIL_FROM,
+                            // Send Email
+                            sgMail.send({
                                 to: `${clockOutDetailsObj.adminNo[0]}@mymail.nyp.edu.sg`,
-                                subject: 'MakerSpaceNYP - Your shift receipt',
+                                from: "account@fishpain.net",
+                                subject: "MakerSpaceNYP - Your shift receipt",
                                 html: message
                             })
-							.catch(err=>{
-								console.log(err)
-							});
 						}
                         
                     );
