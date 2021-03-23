@@ -52,7 +52,8 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const Handlebars = require("handlebars")
 
 // Email Template
-const fs = require('fs')
+const fs = require('fs');
+const { NONAME } = require("dns");
 const receiptTemplateSource = fs.readFileSync(`./email/receipt.hbs`, 'utf8')
 const receiptTemplate = Handlebars.compile(receiptTemplateSource)
 
@@ -207,6 +208,28 @@ function isClockedIn(
             fetchNextPage();
         });
 }
+
+
+// Sends a email to the sac that he failed to clock out
+function failedToClockOutEmail(){
+    // Loop through the records in SAC Time Sheet
+    // BONUS: Only loop through the previous day's record
+    
+    // If there are records that did not clock out: Update the record's status to pending. 
+    // BONUS: Go to airtable and set up such that if the status of a record is equals to pending, then it highlights the whole row orange.
+
+    // Loop through the SAC Information to search for their admin number
+    // Store in an array
+    // send them a email each
+
+}
+
+// Use CronJob to run failedToClockOutEmail()
+
+
+
+
+
 
 // Express routings
 app.get("/", (req, res) => {
@@ -389,3 +412,10 @@ app.use(function (req, res, next) {
 app.listen(port, () => {
     console.log(`SAC attandance app listening at http://localhost:${port}`);
 })
+
+
+
+
+
+
+
