@@ -211,6 +211,12 @@ function isClockedIn(
 
 
 // Sends a email to the sac that he failed to clock out
+//midnight:00 00 00 * * *
+
+
+
+
+
 function failedToClockOutEmail(){
     // Loop through the records in SAC Time Sheet
     // BONUS: Only loop through the previous day's record
@@ -221,12 +227,89 @@ function failedToClockOutEmail(){
     // Loop through the SAC Information to search for their admin number
     // Store in an array
     // send them a email each
+    // basically now do highlight and email
+    const todayDate = new Date().toISOString().split("T")[0];
+    base('SAC Time Sheet').select({
+        // Selecting the first 3 records in Grid view:
+    
+        view: "Grid view"
+    }).eachPage(function page(records, fetchNextPage) {
+        // This function (`page`) will get called for each page of records.
+    
+        records.forEach(function(record) {
+            const clockOutRecordId = record.id;
+            console.log(record.get('Check Out Date-Time'));
+            
+            let recordDate = record.get("Check Out Date-Time")
+            if(recordDate==undefined){
+               
+                
+                base('SAC Time Sheet').update(clockOutRecordId, {
+                   
+                    "Status": "Pending",
+                   
+                  },
+              function(err, record) {
+                if (err) {
+                  console.error(err);
+                  return;
+                }
+        
+
+
+                data = {
+                    name: record.get("SAC Name"),
+                    adminNo: record.get("Admin Number"),
+                    cardID: record.get("Card ID"),
+                    recordID: clockOutRecordId,
+                    times:{
+                    clockIn: record.get("Check In Date-Time")?.split("T")[0],
+                    clockOut: 'Pending'
+                    }
+                }
+
+                var message = receiptTemplate(data);
+
+                // Send Email
+                sgMail.send({
+                    to: `${data.adminNo[0]}@mymail.nyp.edu.sg`,
+                    from: "account@fishpain.net",
+                    subject: "MakerSpaceNYP - Your shift receipt",
+                    html: message
+                })
+              });
+            
+           
+             }
+        });
+    
+        // To fetch the next page of records, call `fetchNextPage`.
+        // If there are more records, `page` will get called again.
+        // If there are no more records, `done` will get called.
+        fetchNextPage();
+    
+    }, function done(err) {
+        if (err) { console.error(err); return; }
+    });
+
+
+
+
 
 }
 
+    
+
 // Use CronJob to run failedToClockOutEmail()
 
+const CronJob = require('cron').CronJob;
 
+console.log('Before job instantiation');
+const job = new CronJob('0 0 * * *', function() {
+	failedToClockOutEmail()
+});
+console.log('After job instantiation');
+job.start();
 
 
 
