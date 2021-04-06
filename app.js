@@ -242,10 +242,12 @@ function failedToClockOutEmail(){
             const clockOutRecordId = record.id;
             console.log(record.get('Check Out Date-Time'));
             
-            let recordDate = record.get("Check Out Date-Time")
-            // let status = record.get('Status')
-            // if(status === 'On Shift'){
-            if(recordDate===undefined){
+            // let recordDate = record.get("Check Out Date-Time")
+            // Instead of checking for undefined, you can check for the status of the shift.
+            // It may cause unknown errors when we check for undefined.
+            // if(recordDate==undefined){
+            let shiftStatus = record.get('Status')
+            if (shiftStatus == 'On Shift' ){
                
                 
                 base('SAC Time Sheet').update(clockOutRecordId, {
