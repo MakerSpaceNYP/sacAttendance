@@ -28,9 +28,11 @@ app.set("views", `views`);
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 
 // Airtable Base ID
-const baseId = process.env.AIRTABLE_BASE_ID || "app8wtFgcpJCtRHVC";
+const baseId = process.env.AIRTABLE_BASE_ID;
 
 const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(baseId);
+
+const mail_from = process.env.MAIL_FROM;
 
 // Nodemailer
 // const nodemailer = require('nodemailer')
@@ -241,21 +243,19 @@ function failedToClockOutEmail(){
             console.log(record.get('Check Out Date-Time'));
             
             let recordDate = record.get("Check Out Date-Time")
-            if(recordDate==undefined){
+            // let status = record.get('Status')
+            // if(status === 'On Shift'){
+            if(recordDate===undefined){
                
                 
                 base('SAC Time Sheet').update(clockOutRecordId, {
-                   
                     "Status": "Pending",
-                   
                   },
-              function(err, record) {
-                if (err) {
-                  console.error(err);
-                  return;
-                }
-        
-
+                function(err, record) {
+                    if (err) {
+                    console.error(err);
+                    return;
+                    }
 
                 data = {
                     name: record.get("SAC Name"),
@@ -273,7 +273,7 @@ function failedToClockOutEmail(){
                 // Send Email
                 sgMail.send({
                     to: `${data.adminNo[0]}@mymail.nyp.edu.sg`,
-                    from: "account@fishpain.net",
+                    from: mail_from,
                     subject: "MakerSpaceNYP - Your shift receipt",
                     html: message
                 })
@@ -392,7 +392,7 @@ app.post("/", (req, res) => {
                             // Send Email
                             sgMail.send({
                                 to: `${clockOutDetailsObj.adminNo[0]}@mymail.nyp.edu.sg`,
-                                from: "account@fishpain.net",
+                                from: mail_from,
                                 subject: "MakerSpaceNYP - Your shift receipt",
                                 html: message
                             })
