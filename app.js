@@ -191,8 +191,9 @@ function isClockedIn(
                     // Unknown Error
                     else {
                         err();
-                        console.log('error')
+                        // console.log('error')
                         return true
+
 
                     }
                 } else {
@@ -315,7 +316,7 @@ job.start();
 
 
 
-
+ 
 // Express routings
 app.get("/", (req, res) => {
     res.render("index", { layout: "main" });
