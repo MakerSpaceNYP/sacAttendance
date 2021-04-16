@@ -134,7 +134,7 @@ function isClockedIn(
                         record.get("Status") == 'On Shift' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check In Date-Time")) >=
-                        6000
+                        60006
                         
                     ) {
                         console.log('Clock Out')
@@ -155,7 +155,7 @@ function isClockedIn(
                         record.get("Status") == 'On Shift' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check In Date-Time")) <
-                        6000
+                        60000
                     ) {
                         statusFailAlreadyIn();
                         console.log('Clock In Duplicate')
@@ -169,7 +169,7 @@ function isClockedIn(
                         (record.get("Status") == 'Shift End' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check Out Date-Time")) >=
-                        6000)
+                        60000)
                     ) {
                         clockIn();
                         console.log('Clock In')
@@ -184,7 +184,7 @@ function isClockedIn(
                         (record.get("Status") == 'Shift End' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check Out Date-Time")) <
-                        6000)
+                        60000)
                     ) {
                         statusFailAlreadyOut();
                         console.log('Clock Out Duplicate')
@@ -195,7 +195,7 @@ function isClockedIn(
                     // Unknown Error
                     else {
                         console.log(record.get('Status'))
-                        err();
+                        err(err);
                         // console.log('error')
                         return true
 
@@ -311,6 +311,7 @@ function failedToClockOutEmail(){
 // Use CronJob to run failedToClockOutEmail()
 
 const CronJob = require('cron').CronJob;
+const { error } = require("console");
 
 console.log('Before job instantiation');
 const job = new CronJob('0 0 * * *', function() {
@@ -441,7 +442,8 @@ app.post("/", (req, res) => {
                     });
                 },
                 // Unknown Error
-                () => {
+                (err) => {
+                    console.error(err)
                     res.render("index", {
                         statusFail: true,
                     });
@@ -449,7 +451,8 @@ app.post("/", (req, res) => {
             );
         },
         // Error: Cannot Read Card
-        () => {
+        (err) => {
+            console.error(err)
             res.render("index", {
                 statusFail: true,
             });
