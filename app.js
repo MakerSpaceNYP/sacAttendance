@@ -134,7 +134,7 @@ function isClockedIn(
                         record.get("Status") == 'On Shift' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check In Date-Time")) >=
-                        60006
+                        6000
                         
                     ) {
                         console.log('Clock Out')
@@ -155,7 +155,7 @@ function isClockedIn(
                         record.get("Status") == 'On Shift' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check In Date-Time")) <
-                        60000
+                        6000
                     ) {
                         statusFailAlreadyIn();
                         console.log('Clock In Duplicate')
@@ -169,7 +169,7 @@ function isClockedIn(
                         (record.get("Status") == 'Shift End' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check Out Date-Time")) >=
-                        60000)
+                        6000)
                     ) {
                         clockIn();
                         console.log('Clock In')
@@ -184,7 +184,7 @@ function isClockedIn(
                         (record.get("Status") == 'Shift End' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check Out Date-Time")) <
-                        60000)
+                        6000)
                     ) {
                         statusFailAlreadyOut();
                         console.log('Clock Out Duplicate')
@@ -265,13 +265,14 @@ function failedToClockOutEmail(){
                     return;
                     }
 
+                let localClockIn = record.get("Check In Date-Time")
+
                 data = {
                     name: record.get("SAC Name"),
                     adminNo: record.get("Admin Number"),
-                    cardID: record.get("Card ID"),
                     recordID: clockOutRecordId,
                     times:{
-                    clockIn: record.get("Check In Date-Time")?.split("T")[0],
+                    clockIn: new Date(localClockIn).toDateString(),
                     clockOut: 'Pending'
                     }
                 }
@@ -378,23 +379,17 @@ app.post("/", (req, res) => {
                                 return;
                             }
                         
+                            let clockInLocalTime = new Date(clockOutDetailsObj.clockInTime)
                             
                             data = {
                                 name: clockOutDetailsObj.sacName[0],
-                                cardID: clockOutDetailsObj.cardID,
 								adminNo: clockOutDetailsObj.adminNo[0],
                                 recordID: clockOutRecordId,
                                 times: {
-                                    clockIn: clockOutDetailsObj.clockInTime,
-                                    clockOut: checkOutDateTime
+                                    clockIn: clockInLocalTime.toLocaleString(),
+                                    clockOut: checkOutDateTime.toLocaleString()
                                 }
                             }
-
-							console.log(clockOutDetailsObj.sacName[0])
-                            console.log(clockOutDetailsObj.adminNo[0])
-                            console.log(clockOutRecordId)
-                            console.log(clockOutDetailsObj.clockInTime)
-							console.log(checkOutDateTime)
 
                             var message = receiptTemplate(data);
 
