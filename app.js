@@ -7,6 +7,10 @@ require("dotenv").config();
 const app = express();
 const package = require("./package.json");
 
+// Cronjob
+const CronJob = require('cron').CronJob;
+const { error } = require("console");
+
 // Express options
 app.use(express.static(`public`));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -58,6 +62,9 @@ const fs = require('fs');
 const { NONAME } = require("dns");
 const receiptTemplateSource = fs.readFileSync(`./email/receipt.hbs`, 'utf8')
 const receiptTemplate = Handlebars.compile(receiptTemplateSource)
+
+const failedToSignTemplateSource = fs.readFileSync(`./email/failedToSign.hbs`, 'utf8')
+const failedToSignTemplate = Handlebars.compile(failedToSignTemplateSource)
 
 
 // Webserver port
@@ -137,7 +144,6 @@ function isClockedIn(
                         6000
                         
                     ) {
-                        console.log('Clock Out')
                         clockOutDetailsObj={}
                         const clockOutRecordId = record.id;
                         clockOutDetailsObj = {
@@ -146,6 +152,7 @@ function isClockedIn(
                             cardID: record.get("Card ID"),
                             clockInTime: record.get("Check In Date-Time"),
                         };
+                        console.log("Clocking Out")
                         clockOut(clockOutRecordId, clockOutDetailsObj);
                         return true
 
@@ -171,8 +178,8 @@ function isClockedIn(
                         Date.parse(record.get("Check Out Date-Time")) >=
                         6000)
                     ) {
-                        clockIn();
                         console.log('Clock In')
+                        clockIn();
                         return true
 
                     }
@@ -208,7 +215,7 @@ function isClockedIn(
 
             //   No records in the SAC Time Sheet yet
             if (count >= records.length) {
-                console.log("Clock In 2");
+                console.log("Clock In");
                 clockIn();
                 return false;
             }
@@ -236,7 +243,8 @@ function failedToClockOutEmail(){
     // Store in an array
     // send them a email each
     // basically now do highlight and email
-    const todayDate = new Date().toISOString().split("T")[0];
+    const todayDate1 = new Date().toISOString().split("T")[0];
+
     base('SAC Time Sheet').select({
         // Selecting the first 3 records in Grid view:
     
@@ -246,12 +254,6 @@ function failedToClockOutEmail(){
     
         records.forEach(function(record) {
             const clockOutRecordId = record.id;
-            console.log(record.get('Check Out Date-Time'));
-            
-            // let recordDate = record.get("Check Out Date-Time")
-            // Instead of checking for undefined, you can check for the status of the shift.
-            // It may cause unknown errors when we check for undefined.
-            // if(recordDate==undefined){
             let shiftStatus = record.get('Status')
             if (shiftStatus == 'On Shift' ){
                
@@ -259,7 +261,7 @@ function failedToClockOutEmail(){
                 base('SAC Time Sheet').update(clockOutRecordId, {
                     "Status": "Pending",
                   },
-                function(err, record) {
+                (err, record) => {
                     if (err) {
                     console.error(err);
                     return;
@@ -272,23 +274,20 @@ function failedToClockOutEmail(){
                     adminNo: record.get("Admin Number"),
                     recordID: clockOutRecordId,
                     times:{
-                    clockIn: new Date(localClockIn).toDateString(),
-                    clockOut: 'Pending'
+                    clockIn: new Date(localClockIn).toLocaleString(),
                     }
                 }
 
-                var message = receiptTemplate(data);
+                var message = failedToSignTemplate(data);
 
                 // Send Email
                 sgMail.send({
                     to: `${data.adminNo[0]}@mymail.nyp.edu.sg`,
                     from: mail_from,
-                    subject: "MakerSpaceNYP - Your shift receipt",
+                    subject: "MakerSpaceNYP - End of Shift Not Recorded",
                     html: message
                 })
-              });
-            
-           
+              });           
              }
         });
     
@@ -300,24 +299,15 @@ function failedToClockOutEmail(){
     }, function done(err) {
         if (err) { console.error(err); return; }
     });
-
-
-
-
-
 }
-
-    
+   
 
 // Use CronJob to run failedToClockOutEmail()
 
-const CronJob = require('cron').CronJob;
-const { error } = require("console");
-
 console.log('Before job instantiation');
-const job = new CronJob('0 0 * * *', function() {
+const job = new CronJob('0 0 * * *', () => {
 	failedToClockOutEmail()
-});
+}, null, true, "Asia/Singapore");
 console.log('After job instantiation');
 job.start();
 
