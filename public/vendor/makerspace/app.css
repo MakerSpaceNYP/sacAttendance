@@ -151,3 +151,8 @@ object.makerspace-mark {
     height: 3rem;
     opacity: .15;
 }
+
+#openCardModalBtn-NonShift[disabled] {
+    pointer-events: none !important;
+    cursor: not-allowed;
+}

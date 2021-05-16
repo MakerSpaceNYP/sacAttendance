@@ -46,11 +46,29 @@ $('#scanCardModal .modal-background').click(() => {
 })
 
 $("#remarkField").change(() => {
+    $("#openCardModalBtn-NonShift").attr("disabled", true)
+
+    if ($("#remarkField").val() === "null%") {
+        $("#openCardModalBtn-NonShift").attr("disabled", true)
+        return false
+    }
+
     if ($("#remarkField").val() === "others%") {
         $("#otherFieldsContainer").slideDown()
         $("#otherFields").attr("required", true)
-    } else {
-        $("#otherFieldsContainer").slideUp()
-        $("#otherFields").attr("required", false)
+
+        return false
     }
+
+    $("#otherFieldsContainer").slideUp()
+    $("#otherField").attr("required", false)
+})
+
+$("#otherField").on('keyup', () => {
+    if ($("#otherField").val() === "") {
+        $("#openCardModalBtn-NonShift").attr("disabled", true)
+        return false
+    }
+
+    $("#openCardModalBtn-NonShift").attr("disabled", false)
 })
