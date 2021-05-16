@@ -9,7 +9,6 @@ const package = require("./package.json");
 
 // Cronjob
 const CronJob = require('cron').CronJob;
-const { error } = require("console");
 
 // Express options
 app.use(express.static(`public`));
@@ -51,7 +50,6 @@ const mail_from = process.env.MAIL_FROM;
 
 // Sendgrid API Key
 const sgMail = require("@sendgrid/mail");
-const { send } = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Handlebars
@@ -59,7 +57,6 @@ const Handlebars = require("handlebars")
 
 // Email Template
 const fs = require('fs');
-const { NONAME } = require("dns");
 const receiptTemplateSource = fs.readFileSync(`./email/receipt.hbs`, 'utf8')
 const receiptTemplate = Handlebars.compile(receiptTemplateSource)
 
@@ -243,7 +240,7 @@ function failedToClockOutEmail(){
     // Store in an array
     // send them a email each
     // basically now do highlight and email
-    const todayDate1 = new Date().toISOString().split("T")[0];
+    // const todayDate1 = new Date().toISOString().split("T")[0];
 
     base('SAC Time Sheet').select({
         // Selecting the first 3 records in Grid view:
@@ -326,7 +323,7 @@ app.post("/", (req, res) => {
         // Card present in SAC Information
         () => {
             isClockedIn(
-                (cardID = card_id),
+                // (cardID = card_id),
                 // Clock In Function
                 () => {
                     const checkInDateTime = new Date();
@@ -458,7 +455,7 @@ app.get("/about", (req, res) => {
 });
 
 //Error Codes
-app.use(function (req, res, next) {
+app.use(function (req, res) {
     if (res.status(400)) {
         res.render("errorCodes", {
             errorCode: "400",
