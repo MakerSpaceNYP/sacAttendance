@@ -40,5 +40,4 @@ jsonfile.writeFile('package.json', packageFileLiteral, { spaces: 2, finalEOL: fa
     console.log('Updating package-lock.json')
     execSync('npm i --package-lock-only')
     console.log('Attempting to push to remote. Please wait.')
-    execSync('git push')
 })
