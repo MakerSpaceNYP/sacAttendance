@@ -50,6 +50,7 @@ $("#remarkField").change(() => {
 
     if ($("#remarkField").val() === "null%") {
         $("#openCardModalBtn-NonShift").attr("disabled", true)
+        $("#otherFieldsContainer").slideUp()
         return false
     }
 
