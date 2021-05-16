@@ -9,28 +9,10 @@ html, body {
     height: 100%;
 }
 
-body {
-    display: -ms-flexbox;
-    display: -webkit-box;
-    display: flex;
-    -ms-flex-align: center;
-    -ms-flex-pack: center;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    background-color: #fff;
-}
-/* 
-#time-display {
-    letter-spacing:2px;
-} */
-
-.fade {
-    /* backdrop-filter: blur(5px); */
-    background-color: rgba(255, 255, 255,.7);
+.modal-background {
+    background: rgba(0,0,0,0.8);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
 }
 
 .modal-lg .modal-content .modal-body {
@@ -53,8 +35,8 @@ body {
 }
 
 .id-card-icon-shadow {
-    height: 2rem;
-    width: 8.5rem;
+    height: 1.8rem;
+    width: 6rem;
     background-color: rgba(0,0,0,.18);
     border-radius: 100%;
     margin: auto;
@@ -150,15 +132,8 @@ body {
 }
 /* ------------- */
 
-.main {
-    background: #fff;
-    box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
-    border-radius: .8rem;
-    padding: 6rem;
-}
-
 body {
-    background: #fff url('/static/bg.png') repeat scroll;
+    background: #000 url('/static/bg-email.png') repeat scroll;
     background-size: 50%;
 }
 

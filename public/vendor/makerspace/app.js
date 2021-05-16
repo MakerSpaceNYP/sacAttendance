@@ -27,17 +27,30 @@ setInterval(() => timeDisplay(), 1000)
 // }, 500)
 
 showLoadingModal = () => {
-    $('#scanCardModalInner').fadeOut('fast', () => {
-        $('#loadingModalInner').fadeIn('fast')
+    $('#scanCardModal').hide(0, () => {
+        $('#loadingModal').show()
     })
 }
 
+$(".openCardModalBtn").click(() => {
+    $('#scanCardModal').fadeIn('fast')
+    $('#input-cardID').focus()
+})
 
-$(function () {
-    $('#scanCardModal').on('shown.bs.modal', function () {
-        $('#input-cardID').focus()
-    });
-    $("#scanCardModal").click(function () {
-        $('#input-cardID').focus()
-    });
-});
+$('#scanCardModal .box').click(() => {
+    $('#input-cardID').focus()
+})
+
+$('#scanCardModal .modal-background').click(() => {
+    $('#input-cardID').focus()
+})
+
+$("#remarkField").change(() => {
+    if ($("#remarkField").val() === "others%") {
+        $("#otherFieldsContainer").slideDown()
+        $("#otherFields").attr("required", true)
+    } else {
+        $("#otherFieldsContainer").slideUp()
+        $("#otherFields").attr("required", false)
+    }
+})

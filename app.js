@@ -316,7 +316,7 @@ job.start();
  
 // Express routings
 app.get("/", (req, res) => {
-    res.render("index", { layout: "main" });
+    res.render("index", { layout: "main", remarks: require("./remarks.json").remarks });  // require("./remarks.json").remarks contains a list of remarks
 });
 
 app.post("/", (req, res) => {
