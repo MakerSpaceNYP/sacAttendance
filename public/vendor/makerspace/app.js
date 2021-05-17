@@ -63,6 +63,7 @@ $("#remarkField").change(() => {
 
     $("#otherFieldsContainer").slideUp()
     $("#otherField").attr("required", false)
+    $("#openCardModalBtn-NonShift").attr("disabled", false)
 })
 
 $("#otherField").on('keyup', () => {
