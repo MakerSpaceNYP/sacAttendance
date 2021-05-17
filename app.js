@@ -323,7 +323,7 @@ app.post("/", (req, res) => {
         // Card present in SAC Information
         () => {
             isClockedIn(
-                // (cardID = card_id),
+                (cardID = card_id),
                 // Clock In Function
                 () => {
                     const checkInDateTime = new Date();
