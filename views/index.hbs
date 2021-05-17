@@ -1,6 +1,7 @@
 <script defer src="/vendor/makerspace/app.js"></script>
 
-<form method="POST" onsubmit="showLoadingModal()">
+{{!-- onsubmit="showLoadingModal()" --}}
+<form method="POST">
 
     <section class="section">
         <div class="container">
@@ -109,18 +110,18 @@
         <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardModal').fadeOut('fast')"></a>
     </div>
 
-    <div id="loadingModal" class="modal is-active" style="display: none">
+    {{!-- <div id="loadingModal" class="modal is-active" style="display: none">
         <div class="modal-background"></div>
         <div class="modal-content">
             <div class="box p-6">
                 <div class="is-size-1 has-text-centered">
                     <i class="fas fa-spinner fa-pulse"></i>
                     <p class="title mt-4">Loading</p>
-                    <p class="subtitle">Processing check-in</p>
+                    <p class="subtitle">Processing sign-in</p>
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
     {{#if statusSuccessIn}}
@@ -220,7 +221,7 @@
             <div class="box p-6">
                 <div class="is-size-1 has-text-centered">
                     <div><i class="fas fa-business-time"></i></div>
-                    <p class="title mt-4 has-text-danger-dark">Duplicate Check-in</p>
+                    <p class="title mt-4 has-text-danger-dark">Duplicate Sign-in</p>
                     <p class="subtitle">Last tap was registered at {{ error.timeDone }}</p>
                 </div>
             </div>

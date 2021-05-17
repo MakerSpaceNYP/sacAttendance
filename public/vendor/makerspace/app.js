@@ -26,11 +26,11 @@ setInterval(() => timeDisplay(), 1000)
 //     $('#input-cardID').val("")
 // }, 500)
 
-showLoadingModal = () => {
-    $('#scanCardModal').hide(0, () => {
-        $('#loadingModal').show()
-    })
-}
+// showLoadingModal = () => {
+//     $('#scanCardModal').hide(0, () => {
+//         $('#loadingModal').show()
+//     })
+// }
 
 $(".openCardModalBtn").click(() => {
     $('#scanCardModal').fadeIn('fast')
