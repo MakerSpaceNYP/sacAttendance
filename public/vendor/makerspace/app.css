@@ -168,10 +168,12 @@ object.makerspace-mark {
         opacity: 0;
     }
     70.1% {
+        transform: translateY(-15px);
         opacity: 0;
     }
     ;
     100% {
+        transform: translateY(0);
         opacity: 1;
     }
 }
