@@ -336,7 +336,6 @@ app.post("/", (req, res) => {
     const card_id = req.body.cardID;
     (req.body.remarkField == 'others%') ? remark = req.body.otherField : remark = req.body.remarkField;
     console.log(req.body);
-    console.log(remark);
     isCardIdPresent(
         (cardID = card_id),
         // Card present in SAC Information
@@ -376,7 +375,8 @@ app.post("/", (req, res) => {
                                 id: clockOutRecordId,
                                 fields: {
                                     "Check Out Date-Time": checkOutDateTime,
-                                    Status : 'Shift End'
+                                    Status : 'Shift End',
+                                    Remarks: remark,
                                 },
                             },
                         ],
