@@ -325,10 +325,10 @@ console.log('After job instantiation');
 job.start();
 
 
- 
+const allRemarks = require("./remarks.json").remarks
 // Express routings
 app.get("/", (req, res) => {
-    res.render("index", { layout: "main", remarks: require("./remarks.json").remarks });  // require("./remarks.json").remarks contains a list of remarks
+    res.render("index", { layout: "main", remarks:allRemarks });  // require("./remarks.json").remarks contains a list of remarks
 });
 
 app.post("/", (req, res) => {
@@ -359,6 +359,7 @@ app.post("/", (req, res) => {
                     console.log("Clock In Successful");
                     // Render Clock In Success template
                     res.render("index", {
+                        remarks: allRemarks,
                         statusSuccessIn: true,
                         timeLogged: checkInDateTime.toLocaleTimeString("en-US", {
                             timeZone: "Asia/Singapore",
@@ -412,6 +413,7 @@ app.post("/", (req, res) => {
                     );
                     // Render Clock Out Success template
                     res.render("index", {
+                        remarks: allRemarks,
                         statusSuccessOut: true,
                         timeLogged: checkOutDateTime.toLocaleTimeString("en-US", {
                             timeZone: "Asia/Singapore",
@@ -423,6 +425,7 @@ app.post("/", (req, res) => {
                 () => {
                     const errorTime = new Date();
                     res.render("index", {
+                        remarks: allRemarks,
                         statusFailAlreadyIn: true,
                         error: {
                             timeDone: errorTime.toLocaleTimeString("en-US", {
@@ -435,6 +438,7 @@ app.post("/", (req, res) => {
                 () => {
                     const errorTime = new Date();
                     res.render("index", {
+                        remarks: allRemarks,
                         statusFailAlreadyOut: true,
                         error: {
                             timeDone: errorTime.toLocaleTimeString("en-US", {
@@ -447,6 +451,7 @@ app.post("/", (req, res) => {
                 (err) => {
                     console.error(err)
                     res.render("index", {
+                        remarks: allRemarks,
                         statusFail: true,
                     });
                 }
@@ -456,6 +461,7 @@ app.post("/", (req, res) => {
         (err) => {
             console.error(err)
             res.render("index", {
+                remarks: allRemarks,
                 statusFail: true,
             });
         }
