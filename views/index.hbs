@@ -174,7 +174,7 @@
         var audio = new Audio('/static/audio/Failed.m4a');
         audio.play();
     </script>
-    <div id="scanCardAlreadyOutModal" class="modal is-active" onclick="$('#scanCardAlreadyOutModal').fadeOut()">
+    <div id="scanCardFailedModal" class="modal is-active" onclick="$('#scanCardFailedModal').fadeOut()">
         <div class="modal-background"></div>
         <div class="modal-content">
             <div class="box p-6">
@@ -188,7 +188,7 @@
                 </div>
             </div>
         </div>
-        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardAlreadyOutModal').fadeOut('fast')"></a>
+        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardFailedModal').fadeOut('fast')"></a>
     </div>
     {{/if}}
 
@@ -197,7 +197,7 @@
         var audio = new Audio('/static/audio/Already.m4a');
         audio.play();
     </script>
-    <div id="scanCardFailedModal" class="modal is-active" onclick="$('#scanCardFailedModal').fadeOut()">
+    <div id="scanCardAlreadyOutModal" class="modal is-active" onclick="$('#scanCardAlreadyOutModal').fadeOut()">
         <div class="modal-background"></div>
         <div class="modal-content">
             <div class="box p-6">
@@ -209,7 +209,7 @@
                 </div>
             </div>
         </div>
-        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardFailedModal').fadeOut('fast')"></a>
+        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardAlreadyOutModal').fadeOut('fast')"></a>
     </div>
     {{/if}}
 
