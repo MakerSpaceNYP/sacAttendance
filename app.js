@@ -70,7 +70,7 @@ const port = process.env.PORT || 3000;
 let sacInfoObj, clockOutDetailsObj, data
 
 // Rate Limiting
-const rateLimit = require("express-rate-limit");
+// const rateLimit = require("express-rate-limit");
 
 // Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 // see https://expressjs.com/en/guide/behind-proxies.html
