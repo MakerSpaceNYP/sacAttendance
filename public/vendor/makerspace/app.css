@@ -156,7 +156,7 @@ object.makerspace-mark {
 }
 
 .modal-content .subtitle.delayedFadeIn {
-    animation: fadeIn 1.5s ease;
+    animation: fadeIn 1.15s ease;
 }
 
 @keyframes fadeIn {
