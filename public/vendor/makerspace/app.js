@@ -23,8 +23,8 @@ timeDisplay()
 setInterval(() => timeDisplay(), 1000)
 
 // setInterval(() => {
-//     $('#input-cardID').val("")
-// }, 500)
+//      $('#input-cardID').val("")
+//  }, 500)
 
 // showLoadingModal = () => {
 //     $('#scanCardModal').hide(0, () => {

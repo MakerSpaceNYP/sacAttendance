@@ -69,6 +69,22 @@ const port = process.env.PORT || 3000;
 
 let sacInfoObj, clockOutDetailsObj, data
 
+// Rate Limiting
+const rateLimit = require("express-rate-limit");
+
+// Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+// see https://expressjs.com/en/guide/behind-proxies.html
+// app.set('trust proxy', 1);
+
+// const limiter = rateLimit({
+//   windowMs: 3000, // 3 Seconds
+//   max: 1, // limit each IP to 1 requests per windowMs
+//   skipSuccessfulRequests: true,
+//   message: ""
+// })
+
+//  apply to all requests
+
 
 // Checks if a card id is present in SAC Information
 function isCardIdPresent(cardID, callback, err) {
@@ -120,6 +136,7 @@ function isClockedIn(
      */
 
     let count = 0;
+    const timeout = 60000; // Time out 
 
     const todayDate = new Date().toISOString().split("T")[0];
     // Retrieve from Airtable SAC Time Sheet
@@ -138,8 +155,7 @@ function isClockedIn(
                         record.get("Status") == 'On Shift' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check In Date-Time")) >=
-                        6000
-                        
+                        timeout
                     ) {
                         clockOutDetailsObj={}
                         const clockOutRecordId = record.id;
@@ -159,7 +175,7 @@ function isClockedIn(
                         record.get("Status") == 'On Shift' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check In Date-Time")) <
-                        6000
+                        timeout
                     ) {
                         statusFailAlreadyIn();
                         console.log('Clock In Duplicate')
@@ -173,7 +189,7 @@ function isClockedIn(
                         (record.get("Status") == 'Shift End' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check Out Date-Time")) >=
-                        6000)
+                        timeout)
                     ) {
                         console.log('Clock In')
                         clockIn();
@@ -188,7 +204,7 @@ function isClockedIn(
                         (record.get("Status") == 'Shift End' &&
                         Date.parse(new Date()) -
                         Date.parse(record.get("Check Out Date-Time")) <
-                        6000)
+                        timeout)
                     ) {
                         statusFailAlreadyOut();
                         console.log('Clock Out Duplicate')
@@ -309,7 +325,6 @@ console.log('After job instantiation');
 job.start();
 
 
-
  
 // Express routings
 app.get("/", (req, res) => {
@@ -317,13 +332,17 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
+    console.log(req.body);
     const card_id = req.body.cardID;
+    (req.body.remarkField == 'others%') ? remark = req.body.otherField : remark = req.body.remarkField;
+    console.log(req.body);
+    console.log(remark);
     isCardIdPresent(
         (cardID = card_id),
         // Card present in SAC Information
         () => {
             isClockedIn(
-                // (cardID = card_id),
+                (cardID = card_id),
                 // Clock In Function
                 () => {
                     const checkInDateTime = new Date();
@@ -333,7 +352,8 @@ app.post("/", (req, res) => {
                                 "Card ID": sacInfoObj.cardID,
                                 SAC_Card_ID: [sacInfoObj.recordID],
                                 "Check In Date-Time": checkInDateTime,
-                                Status : 'On Shift'
+                                Status : 'On Shift',
+                                Remarks: remark
                             },
                         },
                     ]);

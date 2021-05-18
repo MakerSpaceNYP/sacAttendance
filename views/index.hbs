@@ -62,7 +62,7 @@
     </section>
 
     <div id="scanCardModal" class="modal is-active" style="display: none">
-        <div class="modal-background"></div>
+        <div class="modal-background" onclick="$('#scanCardModal').fadeOut()"></div>
         <div class="modal-content">
             <div id="scanCardContent">
                 <div class="box p-6">
@@ -129,7 +129,7 @@
         var audio = new Audio('/static/audio/OKin.m4a');
         audio.play();
     </script>
-    <div id="scanCardOKInModal" class="modal is-active">
+    <div id="scanCardOKInModal" class="modal is-active" onclick="$('#scanCardOKInModal').fadeOut()">
         <div class="modal-background"></div>
         <div class="modal-content">
             <div class="box p-6">
@@ -147,10 +147,10 @@
 
     {{#if statusSuccessOut}}
     <script>
-        var audio = new Audio('/static/audio/OK.mp3');
+        var audio = new Audio('/static/audio/OKout.m4a');
         audio.play();
     </script>
-    <div id="scanCardOKOutModal" class="modal is-active">
+    <div id="scanCardOKOutModal" class="modal is-active"  onclick="$('#scanCardOKOutModal').fadeOut()">
         <div class="modal-background"></div>
         <div class="modal-content">
             <div class="box p-6">
@@ -162,7 +162,7 @@
                 </div>
             </div>
         </div>
-        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardOKInModal').fadeOut('fast')"></a>
+        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardOKOutModal').fadeOut('fast')"></a>
     </div>
     {{/if}}
 
@@ -171,7 +171,7 @@
         var audio = new Audio('/static/audio/Failed.m4a');
         audio.play();
     </script>
-    <div id="scanCardAlreadyOutModal" class="modal is-active">
+    <div id="scanCardAlreadyOutModal" class="modal is-active" onclick="$('#scanCardAlreadyOutModal').fadeOut()">
         <div class="modal-background"></div>
         <div class="modal-content">
             <div class="box p-6">
@@ -194,7 +194,7 @@
         var audio = new Audio('/static/audio/Already.m4a');
         audio.play();
     </script>
-    <div id="scanCardFailedModal" class="modal is-active">
+    <div id="scanCardFailedModal" class="modal is-active" onclick="$('#scanCardFailedModal').fadeOut()">
         <div class="modal-background"></div>
         <div class="modal-content">
             <div class="box p-6">
@@ -215,13 +215,13 @@
         var audio = new Audio('/static/audio/already.m4a');
         audio.play();
     </script>
-    <div id="scanCardAlreadyInModal" class="modal is-active">
+    <div id="scanCardAlreadyInModal" class="modal is-active" onclick="$('#scanCardAlreadyInModal').fadeOut()">
         <div class="modal-background"></div>
         <div class="modal-content">
             <div class="box p-6">
                 <div class="is-size-1 has-text-centered">
                     <div><i class="fas fa-business-time"></i></div>
-                    <p class="title mt-4 has-text-danger-dark">Duplicate Sign-in</p>
+                    <p class="title mt-4 has-text-danger-dark">Duplicated Sign-in</p>
                     <p class="subtitle delayedFadeIn">Last tap was registered at {{ error.timeDone }}</p>
                 </div>
             </div>
