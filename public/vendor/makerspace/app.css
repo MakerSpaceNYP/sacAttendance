@@ -9,28 +9,10 @@ html, body {
     height: 100%;
 }
 
-body {
-    display: -ms-flexbox;
-    display: -webkit-box;
-    display: flex;
-    -ms-flex-align: center;
-    -ms-flex-pack: center;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    background-color: #fff;
-}
-/* 
-#time-display {
-    letter-spacing:2px;
-} */
-
-.fade {
-    /* backdrop-filter: blur(5px); */
-    background-color: rgba(255, 255, 255,.7);
+.modal-background {
+    background: rgba(0, 0, 0, 0.8);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
 }
 
 .modal-lg .modal-content .modal-body {
@@ -38,6 +20,7 @@ body {
 }
 
 /* ------------- */
+
 .id-card-icon {
     /* transform: rotate(-20deg); */
     animation: tapping-animation 1.8s ease-in-out infinite;
@@ -53,9 +36,9 @@ body {
 }
 
 .id-card-icon-shadow {
-    height: 2rem;
-    width: 8.5rem;
-    background-color: rgba(0,0,0,.18);
+    height: 1.8rem;
+    width: 6rem;
+    background-color: rgba(0, 0, 0, .18);
     border-radius: 100%;
     margin: auto;
 }
@@ -109,7 +92,6 @@ body {
         opacity: 0;
         transform: translateY(-10px);
     }
-
     30% {
         opacity: 1;
         transform: translateY(0px) rotate(-20deg)
@@ -120,12 +102,10 @@ body {
     }
 }
 
-
 @keyframes blink-animation {
     0% {
         opacity: 0;
     }
-
     50% {
         opacity: 1;
     }
@@ -138,7 +118,6 @@ body {
     0% {
         opacity: 0;
     }
-
     50% {
         opacity: 1;
         transform: translateY(-7.5px);
@@ -148,17 +127,11 @@ body {
         transform: translateY(-15px);
     }
 }
+
 /* ------------- */
 
-.main {
-    background: #fff;
-    box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
-    border-radius: .8rem;
-    padding: 6rem;
-}
-
 body {
-    background: #fff url('/static/bg.png') repeat scroll;
+    background: #000 url('/static/bg-email.png') repeat scroll;
     background-size: 50%;
 }
 
@@ -175,4 +148,30 @@ body {
 object.makerspace-mark {
     height: 3rem;
     opacity: .15;
+}
+
+#openCardModalBtn-NonShift[disabled] {
+    pointer-events: none !important;
+    cursor: not-allowed;
+}
+
+.modal-content .subtitle.delayedFadeIn {
+    animation: fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    ;
+    70% {
+        opacity: 0;
+    }
+    70.1% {
+        opacity: 0;
+    }
+    ;
+    100% {
+        opacity: 1;
+    }
 }

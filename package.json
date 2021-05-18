@@ -1,13 +1,13 @@
 {
   "name": "sacattendance",
-  "version": "1.0.0-2021.03.05-0206h",
+  "version": "1.1.0-2021.05.17-0055h",
   "description": "Version 2 of SAC Attendance System",
   "main": "app.js",
   "scripts": {
     "start": "node app",
     "test": "nodemon app",
     "eslint-setup": "eslint --init",
-    "push-version": "node scripts/versioning"
+    "version-up": "node scripts/versioning"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-handlebars": "^5.2.1",
+    "express-rate-limit": "^5.2.6",
     "nodemailer": "^6.5.0",
     "sendgrid": "^5.2.3"
   },

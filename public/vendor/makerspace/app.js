@@ -23,21 +23,54 @@ timeDisplay()
 setInterval(() => timeDisplay(), 1000)
 
 // setInterval(() => {
-//     $('#input-cardID').val("")
-// }, 500)
+//      $('#input-cardID').val("")
+//  }, 500)
 
-showLoadingModal = () => {
-    $('#scanCardModalInner').fadeOut('fast', () => {
-        $('#loadingModalInner').fadeIn('fast')
-    })
-}
+// showLoadingModal = () => {
+//     $('#scanCardModal').hide(0, () => {
+//         $('#loadingModal').show()
+//     })
+// }
 
+$(".openCardModalBtn").click(() => {
+    $('#scanCardModal').fadeIn('fast')
+    $('#input-cardID').focus()
+})
 
-$(function () {
-    $('#scanCardModal').on('shown.bs.modal', function () {
-        $('#input-cardID').focus()
-    });
-    $("#scanCardModal").click(function () {
-        $('#input-cardID').focus()
-    });
-});
+$('#scanCardModal .box').click(() => {
+    $('#input-cardID').focus()
+})
+
+$('#scanCardModal .modal-background').click(() => {
+    $('#input-cardID').focus()
+})
+
+$("#remarkField").change(() => {
+    $("#openCardModalBtn-NonShift").attr("disabled", true)
+
+    if ($("#remarkField").val() === "null%") {
+        $("#openCardModalBtn-NonShift").attr("disabled", true)
+        $("#otherFieldsContainer").slideUp()
+        return false
+    }
+
+    if ($("#remarkField").val() === "others%") {
+        $("#otherFieldsContainer").slideDown()
+        $("#otherFields").attr("required", true)
+
+        return false
+    }
+
+    $("#otherFieldsContainer").slideUp()
+    $("#otherField").attr("required", false)
+    $("#openCardModalBtn-NonShift").attr("disabled", false)
+})
+
+$("#otherField").on('keyup', () => {
+    if ($("#otherField").val() === "") {
+        $("#openCardModalBtn-NonShift").attr("disabled", true)
+        return false
+    }
+
+    $("#openCardModalBtn-NonShift").attr("disabled", false)
+})

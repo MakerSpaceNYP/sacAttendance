@@ -1,226 +1,237 @@
 <script defer src="/vendor/makerspace/app.js"></script>
 
-<div class="jumbotron main" style="width: 80vw">
-    <h1 class="display-1" id="time-display" style="font-weight: bold;"></h1>
-    <p class="lead" id="good-day" style="font-size: 2rem;"></p>
-    <hr>
-    <a onclick="$('#input-cardID').focus()" class="btn btn-primary btn-lg" role="button" data-toggle="modal"
-        data-target="#scanCardModal"><i class="fas fa-briefcase"></i>&ensp;Log shift</a>
-</div>
+{{!-- onsubmit="showLoadingModal()" --}}
+<form method="POST">
 
-<!-- Scan Modal -->
-<div class="modal fade" id="scanCardModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div id="scanCardModalInner" class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Log shift</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <div class="display-3">
-                    <div class="id-card-icon"><i class="fas fa-id-card"></i></div>
-                    <div class="id-card-icon-shadow"></div>
-                </div>
-                <br>
-                <h2><b>Tap your card</b></h2>
-                <p>Please tap your Admin. Card to log your shift</p>
-            </div>
-            <form style="z-index: -9999999; opacity: 0; position: absolute; height: 0px" method="POST"
-                onsubmit="showLoadingModal()">
-                <input type="text" placeholder="Card ID" autocomplete="off" id="input-cardID" name="cardID" required>
-            </form>
-            {{!-- <form style="z-index: 9999999; opacity: 20; display: absolute" method="POST">
-                <input type="text" placeholder="Card ID" autocomplete="off" id="input-cardID" name="cardID" required>
-            </form> --}}
-        </div>
-    </div>
-
-    <div id="loadingModalInner" class="modal-dialog modal-dialog-centered modal-lg" role="document"
-        style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Log shift</h5>
-            </div>
-            <div class="modal-body text-center">
-                <div class="display-3" style="display: inline-flex; vertical-align: middle">
-                    <div class="id-card-load-icon">
-                        <i class="fas fa-id-card"></i>&ensp;
+    <section class="section">
+        <div class="container">
+            <div class="box p-6">
+                <div class="columns is-vcentered">
+                    <div class="column">
+                        <h1 class="title is-1" id="time-display"></h1>
+                        <p class="subtitle is-4" id="good-day"></p>
                     </div>
-                    <div class="arrow-icon"><i class="fas fa-arrow-right"></i>&ensp;</div>
-                    <div class="server-icon">
-                        <i class="fas fa-server"></i>
+                    <div class="column">
+                        <div>
+                            <h2 class="title is-4">Shift Work</h2>
+                            <p class="subtitle">For scheduled jobs on roster.</p>
+                            <a class="button is-info openCardModalBtn">
+                                <span class="icon">
+                                    <i class="fas fa-arrow-right"></i>
+                                </span>
+                                <span>Continue</span>
+                            </a>
+                        </div>
+                        <hr>
+                        <div>
+                            <h2 class="title is-4">Non-shift Work</h2>
+                            <p class="subtitle">For project work, etc.</p>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <div class="select remarkFieldSelect">
+                                        <select id="remarkField" name="remarkField">
+                                            <option value="null%" selected>Choose remark</option>
+                                            {{#each remarks}}
+                                            <option value="{{this}}">{{this}}</option>
+                                            {{/each}}
+                                            <option value="others%">Others</option>
+                                        </select>
+                                    </div>
+                                    <div class="icon is-small is-left">
+                                        <i class="fas fa-clipboard-list"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="otherFieldsContainer" class="field" style="display: none;">
+                                <p class="control">
+                                    <input class="input" type="text" id="otherField" name="otherField"
+                                        placeholder="Write your remark...">
+                                </p>
+                            </div>
+                            <a class="button is-info openCardModalBtn" id="openCardModalBtn-NonShift" disabled>
+                                <span class="icon">
+                                    <i class="fas fa-arrow-right"></i>
+                                </span>
+                                <span>Continue</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <br>
-                <h2><b>Loading</b></h2>
-                <p>Please wait as we process your request</p>
             </div>
         </div>
-    </div>
-</div>
+    </section>
 
-<!-- Failed Modal -->
-{{#if statusSuccessIn}}
-<script>
-    var audio = new Audio('/static/audio/OK.mp3');
-    audio.play();
-</script>
-<div class="modal fade" id="scanCardOKInModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div id="scanCardModal" class="modal is-active" style="display: none">
+        <div class="modal-background" onclick="$('#scanCardModal').fadeOut()"></div>
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Log shift</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <div class="display-3">
-                    <div class="text-success"><i class="fas fa-check-circle"></i></div>
-                    <div class="id-card-icon-shadow"></div>
+            <div id="scanCardContent">
+                <div class="box p-6">
+                    <div class="has-text-centered">
+                        <div class="is-size-1">
+                            <div class="id-card-icon"><i class="fas fa-id-card"></i></div>
+                            <div class="id-card-icon-shadow"></div>
+                        </div>
+                        <p class="title mt-4">Tap card</p>
+                        <p class="subtitle">Move your card towards the reader</p>
+                        <a class="has-text-danger-dark">Manual input (Coming Soon)</a>
+                        {{!-- [Error] An invalid form control with name='cardID' is not focusable. --}}
+                        {{!-- <a class="has-text-danger-dark"
+                            onclick="$('#scanCardContent').fadeOut('fast', () => { $('#typeAdminNoContent').fadeIn('fast') })">Manual
+                            input</a> --}}
+                    </div>
+                    {{!-- <input type="text" style="z-index: 999999; opacity: 10; position: absolute; height: 20px"
+                        placeholder="Card ID" autocomplete="off" id="input-cardID" name="cardID" required> --}}
+                    <input type="text" style="z-index: -9999999; opacity: 0; position: absolute; height: 0px"
+                        placeholder="Card ID" autocomplete="off" id="input-cardID" name="cardID" required>
+                    <input type="submit" name="submit_1" value="1" style="z-index: -9999999; opacity: 0; position: absolute; height: 0px" />
                 </div>
-                <br>
-                <h2 class="text-success"><b>Shift started</b></h2>
-                <p id='timeLogged'>Logged at {{ timeLogged }}</p>
             </div>
-        </div>
-    </div>
-</div>
-<script>
-    $('#scanCardOKInModal').modal('show')
-</script>
-{{/if}}
 
-{{#if statusSuccessOut}}
-<script>
-    var audio = new Audio('/static/audio/OK.mp3');
-    audio.play();
-</script>
-<div class="modal fade" id="scanCardOKOutModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Log shift</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <div class="display-3">
-                    <div class="text-success"><i class="fas fa-check-circle"></i></div>
-                    <div class="id-card-icon-shadow"></div>
+            <div id="typeAdminNoContent" style="display: none;">
+                <div class="box has-text-centered p-6">
+                    <p class="title mt-4">Manual input</p>
+                    <p class="subtitle">Please input your admin. number.</p>
+                    <div class="field has-addons">
+                        <div class="control has-icons-left is-expanded">
+                            <input id="adminNo" name="adminNo" class="input is-fullwidth" type="password" placeholder="212345A"
+                                maxlength="7">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-id-card"></i>
+                            </span>
+                        </div>
+                        <div class="control">
+                            <button type="submit" name="submit_2" class="button is-link" value="2">Sign-in</button>
+                        </div>
+                    </div>
+
+                    <a class="has-text-danger-dark"
+                        onclick="$('#typeAdminNoContent').fadeOut('fast', () => { $('#scanCardContent').fadeIn('fast'); $('#input-cardID').focus() })">Scan
+                        card instead</a>
                 </div>
-                <br>
-                <h2 class="text-success"><b>Shift ended</b></h2>
-                <p>Logged at {{ timeLogged }}</p>
             </div>
         </div>
+        {{!-- style="z-index: -9999999; opacity: 0; position: absolute; height: 0px" --}}
+        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardModal').fadeOut('fast')"></a>
     </div>
-</div>
-<script>
-    $('#scanCardOKOutModal').modal('show')
-</script>
-{{/if}}
 
-<!-- Failed Modal -->
-{{#if statusFail}}
-<script>
-    var audio = new Audio('/static/audio/Failed.mp3');
-    audio.play();
-</script>
-<div class="modal fade" id="scanCardFailedModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    {{!-- <div id="loadingModal" class="modal is-active" style="display: none">
+        <div class="modal-background"></div>
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Log shift</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <div class="display-3">
-                    <div class="id-card-failed-icon text-danger"><i class="fas fa-times"></i></div>
-                    <div class="id-card-icon-shadow"></div>
+            <div class="box p-6">
+                <div class="is-size-1 has-text-centered">
+                    <i class="fas fa-spinner fa-pulse"></i>
+                    <p class="title mt-4">Loading</p>
+                    <p class="subtitle">Processing sign-in</p>
                 </div>
-                <br>
-                <h2 class="text-danger"><b>Card Error</b></h2>
-                <p>Something broke when reading the card.<br>Check your card and try again.</p>
-                <small class="text-black-50">Please seek for assistance if you believe that this is a bug.</small>
             </div>
         </div>
-    </div>
-</div>
-<script>
-    $('#scanCardFailedModal').modal('show')
-</script>
-{{/if}}
+    </div> --}}
 
-<!-- Failed Modal (Already Out) -->
-{{#if statusFailAlreadyOut}}
-<script>
-    var audio = new Audio('/static/audio/Failed.mp3');
-    audio.play();
-</script>
-<div class="modal fade" id="scanCardAlreadyOutModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+    {{#if statusSuccessIn}}
+    <script>
+        var audio = new Audio('/static/audio/OKin.m4a');
+        audio.play();
+    </script>
+    <div id="scanCardOKInModal" class="modal is-active" onclick="$('#scanCardOKInModal').fadeOut()">
+        <div class="modal-background"></div>
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Log shift</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="box p-6">
+                <div class="is-size-1 has-text-centered">
+                    <div class="has-text-success-dark"><i class="fas fa-check-circle"></i></div>
+                    <div class="id-card-icon-shadow"></div>
+                    <p class="title mt-4">Checked-in</p>
+                    <p class="subtitle">Logged at {{ timeLogged }}</p>
+                </div>
             </div>
-            <div class="modal-body text-center">
-                <div class="display-4">
+        </div>
+        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardOKInModal').fadeOut('fast')"></a>
+    </div>
+    {{/if}}
+
+    {{#if statusSuccessOut}}
+    <script>
+        var audio = new Audio('/static/audio/OKout.m4a');
+        audio.play();
+    </script>
+    <div id="scanCardOKOutModal" class="modal is-active"  onclick="$('#scanCardOKOutModal').fadeOut()">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box p-6">
+                <div class="is-size-1 has-text-centered">
+                    <div class="text-success"><i class="fas fa-sign-out-alt"></i></div>
+                    <div class="id-card-icon-shadow"></div>
+                    <p class="title mt-4">Checked-out</p>
+                    <p class="subtitle">Logged at {{ timeLogged }}</p>
+                </div>
+            </div>
+        </div>
+        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardOKOutModal').fadeOut('fast')"></a>
+    </div>
+    {{/if}}
+
+    {{#if statusFail}}
+    <script>
+        var audio = new Audio('/static/audio/Failed.m4a');
+        audio.play();
+    </script>
+    <div id="scanCardAlreadyOutModal" class="modal is-active" onclick="$('#scanCardAlreadyOutModal').fadeOut()">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box p-6">
+                <div class="is-size-1 has-text-centered">
+                    <div class="id-card-failed-icon has-text-danger-dark"><i class="fas fa-times"></i></div>
+                    <div class="id-card-icon-shadow"></div>
+                    <p class="title mt-4 has-text-danger-dark">Check card</p>
+                    <p class="subtitle delayedFadeIn">Please ensure that you are using a valid card<br><small
+                            class="has-text-grey-light">If you believe that this is an error, please seek for
+                            assistance</small></p>
+                </div>
+            </div>
+        </div>
+        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardAlreadyOutModal').fadeOut('fast')"></a>
+    </div>
+    {{/if}}
+
+    {{#if statusFailAlreadyOut}}
+    <script>
+        var audio = new Audio('/static/audio/Already.m4a');
+        audio.play();
+    </script>
+    <div id="scanCardFailedModal" class="modal is-active" onclick="$('#scanCardFailedModal').fadeOut()">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box p-6">
+                <div class="is-size-1 has-text-centered">
                     <div class="id-card-tick-icon"><i class="fas fa-id-card"></i></div>
                     <div class="id-card-icon-shadow"></div>
+                    <p class="title mt-4 has-text-danger-dark">Duplicate Check-out</p>
+                    <p class="subtitle delayedFadeIn">Last tap was registered at {{ error.timeDone }}</p>
                 </div>
-                <br>
-                <h2><b>Already signed out</b></h2>
-                <p>Last tap was registered at {{ error.timeDone }}</p>
-                <small>What considers as 'already'?<br><span class="text-black-50">Any card taps in the last 1mins
-                        since the previous tap is considered as 'action already performed'.</span></small>
             </div>
         </div>
+        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardFailedModal').fadeOut('fast')"></a>
     </div>
-</div>
-<script>
-    $('#scanCardAlreadyOutModal').modal('show')
-</script>
-{{/if}}
+    {{/if}}
 
-<!-- Failed Modal (Already In) -->
-{{#if statusFailAlreadyIn}}
-<script>
-    var audio = new Audio('/static/audio/Failed.mp3');
-    audio.play();
-</script>
-<div class="modal fade" id="scanCardAlreadyInModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    {{#if statusFailAlreadyIn}}
+    <script>
+        var audio = new Audio('/static/audio/already.m4a');
+        audio.play();
+    </script>
+    <div id="scanCardAlreadyInModal" class="modal is-active" onclick="$('#scanCardAlreadyInModal').fadeOut()">
+        <div class="modal-background"></div>
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Log shift</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <div class="display-4">
+            <div class="box p-6">
+                <div class="is-size-1 has-text-centered">
                     <div><i class="fas fa-business-time"></i></div>
+                    <p class="title mt-4 has-text-danger-dark">Duplicated Sign-in</p>
+                    <p class="subtitle delayedFadeIn">Last tap was registered at {{ error.timeDone }}</p>
                 </div>
-                <br>
-                <h2><b>Already signed in</b></h2>
-                <p>Last tap was registered at {{ error.timeDone }}</p>
-                <small>What considers as 'already'?<br><span class="text-black-50">Any card taps in the last 1min
-                        since the previous tap is considered as 'action already performed'.</span></small>
             </div>
         </div>
+        <a class="modal-close is-large" aria-label="close" onclick="$('#scanCardAlreadyInModal').fadeOut('fast')"></a>
     </div>
-</div>
-<script>
-    $('#scanCardAlreadyInModal').modal('show')
-</script>
-{{/if}}
+    {{/if}}
+
+</form>
