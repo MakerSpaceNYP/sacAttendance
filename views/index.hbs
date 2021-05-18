@@ -73,11 +73,10 @@
                         </div>
                         <p class="title mt-4">Tap card</p>
                         <p class="subtitle">Move your card towards the reader</p>
-                        <a class="has-text-danger-dark">Manual input (Coming Soon)</a>
                         {{!-- [Error] An invalid form control with name='cardID' is not focusable. --}}
-                        {{!-- <a class="has-text-danger-dark"
+                        <a class="has-text-danger-dark is-hidden"
                             onclick="$('#scanCardContent').fadeOut('fast', () => { $('#typeAdminNoContent').fadeIn('fast') })">Manual
-                            input</a> --}}
+                            input</a>
                     </div>
                     {{!-- <input type="text" style="z-index: 999999; opacity: 10; position: absolute; height: 20px"
                         placeholder="Card ID" autocomplete="off" id="input-cardID" name="cardID" required> --}}
