@@ -4,6 +4,7 @@ const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const Airtable = require("airtable");
 const config = require("./config.json")
+require("dotenv").config()
 const app = express();
 const package = require("./package.json");
 
@@ -28,10 +29,13 @@ app.set("view engine", "hbs");
 app.set("views", `views`);
 
 // Airtable API Key
-const AIRTABLE_API_KEY = config.airtable.apiKey;
+// const AIRTABLE_API_KEY = config.airtable.apiKey;
+
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 
 // Airtable Base ID
-const baseId = config.airtable.baseId;
+// const baseId = config.airtable.baseId;
+const baseId = process.env.AIRTABLE_BASE_ID;
 
 const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(baseId);
 
