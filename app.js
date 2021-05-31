@@ -3,7 +3,7 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const Airtable = require("airtable");
-const config = require("./config.json")
+// const config = require("./config.json")
 require("dotenv").config()
 const app = express();
 const package = require("./package.json");
@@ -39,7 +39,8 @@ const baseId = process.env.AIRTABLE_BASE_ID;
 
 const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(baseId);
 
-const mail_from = config.mail.fromAddress;
+// const mail_from = config.mail.fromAddress;
+const mail_from = process.env.MAIL_FROM;
 
 // Nodemailer
 // const nodemailer = require('nodemailer')
@@ -54,8 +55,8 @@ const mail_from = config.mail.fromAddress;
 
 // Sendgrid API Key
 const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey(config.mail.sendgridKey);
-
+// sgMail.setApiKey(config.mail.sendgridKey);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 // Handlebars
 const Handlebars = require("handlebars")
 
