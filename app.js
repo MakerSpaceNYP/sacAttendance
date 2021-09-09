@@ -324,11 +324,9 @@ function failedToClockOutEmail(){
 
 // Use CronJob to run failedToClockOutEmail()
 
-console.log('Before job instantiation');
 const job = new CronJob('0 0 * * *', () => {
 	failedToClockOutEmail()
 }, null, true, "Asia/Singapore");
-console.log('After job instantiation');
 job.start();
 
 
