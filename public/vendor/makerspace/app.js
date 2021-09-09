@@ -34,15 +34,23 @@ showLoadingModal = () => {
 
 $(".openCardModalBtn").click(() => {
     $('#scanCardModal').fadeIn('fast')
+    $('#input-cardID').prop('required', true)
     $('#input-cardID').focus()
 })
 
 $('#scanCardModal .box').click(() => {
+    $('#input-cardID').prop('required', true)
     $('#input-cardID').focus()
 })
 
 $('#scanCardModal .modal-background').click(() => {
+    $('#input-cardID').prop('required', true)
     $('#input-cardID').focus()
+})
+
+$('#typeAdminNoContent .box').click(() => {
+    $('#input-cardID').prop('required', false)
+    $('#input-adminNo').prop('required', true)
 })
 
 $("#remarkField").change(() => {
