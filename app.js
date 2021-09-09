@@ -480,6 +480,51 @@ app.get("/about", (req, res) => {
     });
 });
 
+const getSACShiftDetails = (callback) => {
+    let sacNameList = [];
+    base("SAC Time Sheet").select({
+        // Selecting the first 3 records in SAC Time Sheet
+        maxRecords: 3,
+        // Ordering by the "Check In Date-Time" field
+        sort: [{ field: "Check In Date-Time", direction: "desc" }],
+        // Returning the "Check In Date-Time" and "Check Out Date-Time" fields
+        fields: [
+            "Check In Date-Time",
+            "SAC Name",
+        ],
+        filterByFormula: `{Status} = "On Shift"`,
+    })
+        .eachPage(
+            function page(records, fetchNextPage) {
+                // This function (`page`) will get called for each page of records.
+                records.forEach(function (record) {
+                    // console.log("Retrieved record:", record.get("SAC Name"));
+                    sacNameList.push(record.get("SAC Name"));
+                });
+                // To fetch the next page of records, call `fetchNextPage`.
+                // If there are more records, `page` will get called again.
+                // If there are no more records, `done` will get called.
+                fetchNextPage();
+            },
+            function done(err) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                callback(sacNameList);
+            }
+        );
+};
+
+
+app.get("/onshift", (req, res) => {
+    getSACShiftDetails((sacNameList) => {
+        res.render("onshift", {
+            sacName: sacNameList,
+        });
+    });
+});
+
 //Error Codes
 app.use(function (req, res) {
     if (res.status(400)) {
