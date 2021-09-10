@@ -3,7 +3,8 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const Airtable = require("airtable");
-require("dotenv").config();
+// const config = require("./config.json")
+require("dotenv").config()
 const app = express();
 const package = require("./package.json");
 
@@ -28,13 +29,17 @@ app.set("view engine", "hbs");
 app.set("views", `views`);
 
 // Airtable API Key
+// const AIRTABLE_API_KEY = config.airtable.apiKey;
+
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 
 // Airtable Base ID
+// const baseId = config.airtable.baseId;
 const baseId = process.env.AIRTABLE_BASE_ID;
 
 const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(baseId);
 
+// const mail_from = config.mail.fromAddress;
 const mail_from = process.env.MAIL_FROM;
 
 // Nodemailer
@@ -44,14 +49,14 @@ const mail_from = process.env.MAIL_FROM;
 //     port: 587,
 //     auth: {
 //         user: 'apikey',
-//         pass: process.env.SENDGRID_API_KEY
+//         pass: config.mail.sendgridKey
 //     }
 // });
 
 // Sendgrid API Key
 const sgMail = require("@sendgrid/mail");
+// sgMail.setApiKey(config.mail.sendgridKey);
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
 // Handlebars
 const Handlebars = require("handlebars")
 
@@ -115,6 +120,8 @@ function isCardIdPresent(cardID, callback, err) {
                 return;
             }
             fetchNextPage();
+        }).catch((err)=>{
+            console.log(err);
         });
 }
 
