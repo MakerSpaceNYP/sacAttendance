@@ -325,11 +325,9 @@ function failedToClockOutEmail(){
 
 // Use CronJob to run failedToClockOutEmail()
 
-console.log('Before job instantiation');
 const job = new CronJob('0 0 * * *', () => {
 	failedToClockOutEmail()
 }, null, true, "Asia/Singapore");
-console.log('After job instantiation');
 job.start();
 
 
@@ -500,6 +498,7 @@ const getSACShiftDetails = (callback) => {
             "Check In Date-Time",
             "SAC Name",
         ],
+
         filterByFormula: `AND({Status} = "On Shift", {Remark} = "Normal Shift")`,
     })
         .eachPage(
@@ -529,6 +528,7 @@ app.get("/onshift", (req, res) => {
     getSACShiftDetails((sacNameList) => {
         res.render("onshift", {
             people: sacNameList,
+
         });
     });
 });
