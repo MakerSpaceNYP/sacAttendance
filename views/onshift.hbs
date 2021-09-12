@@ -1,6 +1,18 @@
-<div class="container has-text-white">
-    <h1 class="is-size-1">People on shift</h1>
-    <div class="is-size-3">
-        {{sacName}}
+<meta http-equiv="refresh" content="60">
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-multiline is-centered">
+      <div class="column is-8 has-text-centered">
+        <h2 class="mt-2 mb-4 is-size-1 -mobile has-text-weight-bold has-text-white">People On Shift</h2>
+        <ol class="pt-5">
+            {{#each people}}
+                <li class=" box mt-2 mb-4 is-size-2 -mobile has-text-weight-bold">{{this}}</li>
+                {{else}}
+                <li class=" box mt-2 mb-4 is-size-2 -mobile has-text-weight-bold">No one is on shift</li>
+            {{/each}}
+        </ol>
+      </div>
     </div>
-</div>
+  </div>
+</section>

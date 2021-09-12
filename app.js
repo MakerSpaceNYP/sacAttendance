@@ -39,6 +39,7 @@ const baseId = process.env.AIRTABLE_BASE_ID;
 
 const base = new Airtable({ apiKey: AIRTABLE_API_KEY }).base(baseId);
 
+
 // const mail_from = config.mail.fromAddress;
 const mail_from = process.env.MAIL_FROM;
 
@@ -499,7 +500,7 @@ const getSACShiftDetails = (callback) => {
             "Check In Date-Time",
             "SAC Name",
         ],
-        filterByFormula: `{Status} = "On Shift"`,
+        filterByFormula: `AND({Status} = "On Shift", {Remark} = "Normal Shift")`,
     })
         .eachPage(
             function page(records, fetchNextPage) {
@@ -527,7 +528,7 @@ const getSACShiftDetails = (callback) => {
 app.get("/onshift", (req, res) => {
     getSACShiftDetails((sacNameList) => {
         res.render("onshift", {
-            sacName: sacNameList,
+            people: sacNameList,
         });
     });
 });
