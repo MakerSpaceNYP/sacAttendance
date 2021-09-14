@@ -505,13 +505,19 @@ const getSACShiftDetails = (callback) => {
         .eachPage(
             function page(records, fetchNextPage) {
                 // This function (`page`) will get called for each page of records.
+
                 records.forEach(function (record) {
-                    let a = {
-                        sacName : record.get("SAC Name"),
-                        sacPhoto : record.get("SAC Photo")[0].url,
+                    let a = {}
+                    a["sacName"] = record.get("SAC Name");
+                    try{
+                        a["sacPhoto"] = record.get("SAC Photo")[0].url;
                     }
-                    console.log(a.sacPhoto);
-                    sacInfoList.push(a);
+                    catch(err){
+                        a["sacPhoto"] = false;
+                    }
+                    finally {
+                        sacInfoList.push(a);
+                    }
                 });
                 // To fetch the next page of records, call `fetchNextPage`.
                 // If there are more records, `page` will get called again.
