@@ -1,5 +1,6 @@
 <meta http-equiv="refresh" content="60">
 
+
 <section class="section">
   <div class="container">
     <div class="columns is-multiline is-centered">
@@ -7,11 +8,24 @@
         <h2 class="mt-2 mb-4 is-size-1 -mobile has-text-weight-bold has-text-white">Student Assistant Coaches</h2>
         <h2 class="mt-2 mb-4 is-size-3 -mobile has-text-weight-bold has-text-white">Do Approach Them For Help!!</h2>
         <ol class="pt-5">
-            {{#each people}}
-                <li class=" box mt-2 mb-4 is-size-2 -mobile has-text-weight-bold">{{this}}</li>
+          <div class="columns">
+            {{#each sacInfoList}}
+              <div class="column box mx-3 my-0 has-text-weight-bold">
+                <div class="columns">
+                  <div class="column">
+                    <figure class="image is-square">
+                      <img src="{{this.sacPhoto}}" alt="{{this.sacPhoto}}" class="img-fluid">
+                    </figure>
+                    <div class="columns">
+                      <div class="column">{{this.sacName}}</div>
+                  </div>
+                  </div>
+                </div>
+              </div>
                 {{else}}
-                <li class=" box mt-2 mb-4 is-size-2 -mobile has-text-weight-bold">We Will Be Back By 10:00 A.M.</li>
+                <li class="box mt-2 mb-4 is-size-2 -mobile has-text-weight-bold">We Will Be Back By 10:00 A.M.</li>
             {{/each}}
+          </div>
         </ol>
       </div>
     </div>
