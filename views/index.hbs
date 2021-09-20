@@ -1,63 +1,92 @@
 <script defer src="/vendor/makerspace/app.js"></script>
 
-{{!-- onsubmit="showLoadingModal()" --}}
 <form method="POST" onsubmit="showLoadingModal()">
+    <section class="hero is-light">
+        <div class="hero-body">
+            <div class="container mt-6">
+                <div class="columns is-vcentered">
+                    <div class="column">
+                        <p class="title is-2 has-text-black-bis">
+                            Welcome to MakerSpaceNYP
+                        </p>
+                        <p class="subtitle has-text-grey">
+                            SAC Attendance System
+                        </p>
+                    </div>
+                    <div class="column has-text-right">
+                        <h1 class="title is-3 has-text-black-bis" id="time-display"></h1>
+                        <p class="subtitle is-5 has-text-grey" id="good-day"></p>
+                    </div>
+                </div>
+            </div>
+    </section>
 
     <section class="section">
         <div class="container">
-            <div class="box p-6">
-                <div class="columns is-vcentered">
-                    <div class="column">
-                        <h1 class="title is-1" id="time-display"></h1>
-                        <p class="subtitle is-4" id="good-day"></p>
+            <div class="columns is-vcentered">
+                <div class="column">
+                    <div class="box p-6 has-background-link-dark box-ClockInType">
+                        <h2 class="title has-text-white">Shift work</h2>
+                        <p class="subtitle has-text-light">For scheduled jobs on roster</p>
+                        <a class="button is-link is-dark openCardModalBtn"><i
+                                class="fas fa-arrow-right"></i>&ensp;Continue</a>
                     </div>
-                    <div class="column">
-                        <div>
-                            <h2 class="title is-4">Shift Work</h2>
-                            <p class="subtitle">For scheduled jobs on roster.</p>
-                            <a class="button is-info openCardModalBtn">
-                                <span class="icon">
-                                    <i class="fas fa-arrow-right"></i>
-                                </span>
-                                <span>Continue</span>
-                            </a>
-                        </div>
-                        <hr>
-                        <div>
-                            <h2 class="title is-4">Non-shift Work</h2>
-                            <p class="subtitle">For project work, etc.</p>
-                            <div class="field">
-                                <div class="control has-icons-left">
-                                    <div class="select remarkFieldSelect">
-                                        <select id="remarkField" name="remarkField">
-                                            <option value="null%" selected>Choose remark</option>
-                                            {{#each remarks}}
-                                            <option value="{{this}}">{{this}}</option>
-                                            {{/each}}
-                                            <option value="others%">Others</option>
-                                        </select>
-                                    </div>
-                                    <div class="icon is-small is-left">
-                                        <i class="fas fa-clipboard-list"></i>
+                </div>
+                <div class="column">
+                    <div class="box p-6 has-background-grey-dark box-ClockInType">
+                        <h2 class="title has-text-white">Non-shift work</h2>
+                        <p class="subtitle has-text-light">For project work, workshops, etc.</p>
+                        <div class="columns">
+                            <div class="column">
+                                <div class="field">
+                                    <div class="control has-icons-left">
+                                        <div class="select remarkFieldSelect is-white" style="width: 100%">
+                                            <select id="remarkField" name="remarkField" style="width: 100%">
+                                                <option value="null%" selected>Choose remark</option>
+                                                {{#each remarks}}
+                                                <option value="{{this}}">{{this}}</option>
+                                                {{/each}}
+                                                <option value="others%">Others</option>
+                                            </select>
+                                        </div>
+                                        <div class="icon is-small is-left">
+                                            <i class="fas fa-clipboard-list"></i>
+                                        </div>
                                     </div>
                                 </div>
+                                <div id="otherFieldsContainer" class="field" style="display: none;">
+                                    <p class="control">
+                                        <input class="input is-white" type="text" id="otherField" name="otherField"
+                                            placeholder="Write your remark...">
+                                    </p>
+                                </div>
                             </div>
-                            <div id="otherFieldsContainer" class="field" style="display: none;">
-                                <p class="control">
-                                    <input class="input" type="text" id="otherField" name="otherField"
-                                        placeholder="Write your remark...">
-                                </p>
+                            <div class="column is-one-quarter has-text-right">
+                                <a class="button is-dark openCardModalBtn" id="openCardModalBtn-NonShift" disabled><i
+                                        class="fas fa-arrow-right"></i>&ensp;Continue</a>
                             </div>
-                            <a class="button is-info openCardModalBtn" id="openCardModalBtn-NonShift" disabled>
-                                <span class="icon">
-                                    <i class="fas fa-arrow-right"></i>
-                                </span>
-                                <span>Continue</span>
-                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section class="section mt-0">
+        <div class="container">
+            <hr>
+            <span class="buttons is-centered">
+                <a class="button is-circular is-large ml-2 mr-2" href="/help">
+                    <span class="icon is-small">
+                        <i class="fas fa-life-ring"></i>
+                    </span>
+                </a>
+                <a class="button is-circular is-large ml-2 mr-2" href="/about" target="_blank">
+                    <span class="icon is-small">
+                        <i class="fas fa-info-circle"></i>
+                    </span>
+                </a>
+            </span>
         </div>
     </section>
 
@@ -67,10 +96,9 @@
             <div id="scanCardContent">
                 <div class="box p-6">
                     <div class="has-text-centered">
-                        <input type="text" style="opacity: 0; position: absolute"
-                            placeholder="Card ID" autocomplete="off" id="input-cardID" name="cardID">
-                        <input type="submit" name="submit_type" value="1"
-                            style="opacity: 0; position: absolute" />
+                        <input type="text" style="opacity: 0; position: absolute" placeholder="Card ID"
+                            autocomplete="off" id="input-cardID" name="cardID">
+                        <input type="submit" name="submit_type" value="1" style="opacity: 0; position: absolute" />
                         <div class="is-size-1">
                             <div class="id-card-icon"><i class="fas fa-id-card"></i></div>
                             <div class="id-card-icon-shadow"></div>
@@ -78,7 +106,7 @@
                         <p class="title mt-4">Tap card</p>
                         <p class="subtitle">Move your card towards the reader</p>
                         {{!-- [Error] An invalid form control with name='cardID' is not focusable. --}}
-                        
+
                         {{!-- <a class="has-text-danger-dark" id="selectManualInput"
                             onclick="$('#scanCardContent').fadeOut('fast', () => { $('#typeAdminNoContent').fadeIn('fast') })">Manual
                             input</a> --}}
@@ -122,7 +150,7 @@
                         <i class="fas fa-spinner fa-pulse"></i>
                         <div class="id-card-icon-shadow"></div>
                     </div>
-                    <p class="title mt-4">Reading information</p>
+                    <p class="title mt-4">Reading card</p>
                     <p class="subtitle">Please wait...</p>
                 </div>
             </div>
