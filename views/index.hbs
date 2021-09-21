@@ -76,7 +76,7 @@
         <div class="container">
             <hr>
             <span class="buttons is-centered">
-                <a class="button is-circular is-large ml-2 mr-2" href="/help">
+                <a class="button is-circular is-large ml-2 mr-2" onclick="$('#helpModal').fadeIn('fast')">
                     <span class="icon is-small">
                         <i class="fas fa-life-ring"></i>
                     </span>
@@ -265,3 +265,22 @@
     {{/if}}
 
 </form>
+
+<div id="helpModal" class="modal is-active" style="display: none;">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+        <div class="box p-6">
+            <div>
+                <div class="is-size-1">
+                    <i class="fas fa-life-ring"></i>
+                </div>
+                <p class="title mt-4">Having trouble?</p>
+                <li>You may contact us via the MakerSpaceNYP SAC Whatsapp group chat for technical support.</li>
+                <li>Please provide additional information in your message where possible to allow us to quickly identify and rectify your issue.</li>
+                <br>
+                <b>Thank you.</b>
+            </div>
+        </div>
+    </div>
+    <a class="modal-close is-large" aria-label="close" onclick="$('#helpModal').fadeOut('fast')"></a>
+</div>
