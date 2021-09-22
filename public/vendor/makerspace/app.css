@@ -1,16 +1,30 @@
-* {
-    font-family: 'IBM Plex Sans', Arial, Helvetica, sans-serif;
+*, button, select, input {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-family: "Metropolis", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 html, body {
     height: 100%;
 }
 
+.box {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.select select {
+    background-color: #363636;
+    color: white;
+    border: none
+}
+
+.is-circular {
+    border-radius: 50%;
+}
+
 .modal-background {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.5);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     backdrop-filter: saturate(180%) blur(20px);
 }
@@ -20,6 +34,10 @@ html, body {
 }
 
 /* ------------- */
+
+.box-ClockInType {
+    height: 18rem
+}
 
 .id-card-icon {
     /* transform: rotate(-20deg); */
@@ -128,22 +146,37 @@ html, body {
     }
 }
 
-/* ------------- */
-
-body {
-    background: #000 url('/static/bg-email.png') repeat scroll;
-    background-size: 50%;
-}
+/* Credit: hiyamashu/Metronami */
 
 .modal-content {
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-    padding: 2px;
-    border: none
+    animation: modalPopIn 0.2s ease-out;
 }
 
-.modal-header {
-    border-bottom: none;
+.modal-background {
+    animation: modalFadeIn 0.5s ease;
 }
+
+@keyframes modalPopIn {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ------------- */
 
 object.makerspace-mark {
     height: 3rem;
@@ -176,4 +209,13 @@ object.makerspace-mark {
         transform: translateY(0);
         opacity: 1;
     }
+}
+
+/* --------------- */
+
+.sacPhoto {
+    height: 18rem;
+    width: auto;
+    border-radius: 6px;
+    box-shadow: inset rgba(17, 17, 26, 0.4) 0px 4px 16px, inset rgba(17, 17, 26, 0.4) 0px 8px 24px, inset rgba(17, 17, 26, 0.4) 0px 16px 56px;
 }

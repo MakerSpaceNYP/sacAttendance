@@ -20,7 +20,7 @@ timeDisplay = () => {
 
 timeDisplay()
 
-setInterval(() => timeDisplay(), 1000)
+setInterval(() => timeDisplay(), 500)
 
 // setInterval(() => {
 //      $('#input-cardID').val("")

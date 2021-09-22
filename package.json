@@ -1,6 +1,6 @@
 {
   "name": "sacattendance",
-  "version": "1.1.0-2021.05.17-0055h",
+  "version": "1.1.0-2021.09.21-0335h",
   "description": "Version 2 of SAC Attendance System",
   "main": "app.js",
   "scripts": {
