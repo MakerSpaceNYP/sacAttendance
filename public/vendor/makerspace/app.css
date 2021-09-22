@@ -147,6 +147,7 @@ html, body {
 }
 
 /* Credit: hiyamashu/Metronami */
+
 .modal-content {
     animation: modalPopIn 0.2s ease-out;
 }
@@ -211,8 +212,10 @@ object.makerspace-mark {
 }
 
 /* --------------- */
+
 .sacPhoto {
     height: 18rem;
     width: auto;
     border-radius: 6px;
+    box-shadow: inset rgba(17, 17, 26, 0.4) 0px 4px 16px, inset rgba(17, 17, 26, 0.4) 0px 8px 24px, inset rgba(17, 17, 26, 0.4) 0px 16px 56px;
 }
