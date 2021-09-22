@@ -17,8 +17,8 @@
                     </p>
                 </div>
                 <div class="column has-text-right">
-                    <h1 class="title is-3 has-text-white" id="time-display"></h1>
-                    <p class="subtitle is-5 has-text-light" id="good-day"></p>
+                    <h1 class="title is-2 has-text-white" id="time-display"></h1>
+                    <p class="subtitle is-4 has-text-light" id="good-day"></p>
                 </div>
             </div>
         </div>
@@ -26,14 +26,12 @@
 
 <section class="section">
     <div class="container">
-        <div class="columns">
+        <div class="columns is-centered">
             {{#each sacInfoList}}
             <div class="column is-one-quarter">
                 <div class="box">
-                    <figure class="image is-square">
-                        <img src="{{this.sacPhoto}}" alt="{{this.sacPhoto}}" class="img-fluid">
-                    </figure>
-                    <p class="title is-5">{{this.sacName}}</p>
+                    <div class="sacPhoto block" style="background: url('{{this.sacPhoto}}') top no-repeat; background-size: cover"></div>
+                    <p class="title is-4 has-text-centered">{{this.sacName}}</p>
                 </div>
             </div>
             {{else}}

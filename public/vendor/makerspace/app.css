@@ -209,3 +209,10 @@ object.makerspace-mark {
         opacity: 1;
     }
 }
+
+/* --------------- */
+.sacPhoto {
+    height: 18rem;
+    width: auto;
+    border-radius: 6px;
+}
