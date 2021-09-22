@@ -487,16 +487,17 @@ app.get("/about", (req, res) => {
 });
 
 const getSACShiftDetails = (callback) => {
-    let sacNameList = [];
+    let sacInfoList = [];
     base("SAC Time Sheet").select({
         // Selecting the first 3 records in SAC Time Sheet
-        maxRecords: 3,
+        maxRecords: 10,
         // Ordering by the "Check In Date-Time" field
         sort: [{ field: "Check In Date-Time", direction: "desc" }],
         // Returning the "Check In Date-Time" and "Check Out Date-Time" fields
         fields: [
             "Check In Date-Time",
             "SAC Name",
+            "SAC Photo",
         ],
 
         filterByFormula: `AND({Status} = "On Shift", {Remark} = "Normal Shift")`,
@@ -504,9 +505,19 @@ const getSACShiftDetails = (callback) => {
         .eachPage(
             function page(records, fetchNextPage) {
                 // This function (`page`) will get called for each page of records.
+
                 records.forEach(function (record) {
-                    // console.log("Retrieved record:", record.get("SAC Name"));
-                    sacNameList.push(record.get("SAC Name"));
+                    let a = {}
+                    a["sacName"] = record.get("SAC Name");
+                    try{
+                        a["sacPhoto"] = record.get("SAC Photo")[0].url;
+                    }
+                    catch(err){
+                        a["sacPhoto"] = false;
+                    }
+                    finally {
+                        sacInfoList.push(a);
+                    }
                 });
                 // To fetch the next page of records, call `fetchNextPage`.
                 // If there are more records, `page` will get called again.
@@ -518,16 +529,16 @@ const getSACShiftDetails = (callback) => {
                     console.error(err);
                     return;
                 }
-                callback(sacNameList);
+                callback(sacInfoList);
             }
         );
 };
 
 
 app.get("/onshift", (req, res) => {
-    getSACShiftDetails((sacNameList) => {
+    getSACShiftDetails((sacInfoList) => {
         res.render("onshift", {
-            people: sacNameList,
+            sacInfoList: sacInfoList,
 
         });
     });
@@ -567,10 +578,4 @@ app.use(function (req, res) {
 app.listen(port, () => {
     console.log(`SAC attandance app listening at http://localhost:${port}`);
 })
-
-
-
-
-
-
 

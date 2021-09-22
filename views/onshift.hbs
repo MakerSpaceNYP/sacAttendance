@@ -1,18 +1,56 @@
 <meta http-equiv="refresh" content="60">
 
+{{!-- remove scroll bar --}}
+<style>html{overflow: hidden;}</style>
+
+
+<script defer src="/vendor/makerspace/app.js"></script>
+
+<section class="hero is-dark" style="background-color: #01735C;">
+    <div class="hero-body">
+        <div class="container mt-6">
+            <div class="columns is-vcentered">
+                <div class="column">
+                    <p class="title is-2 has-text-white">
+                        <i class="fas fa-arrow-circle-right"></i>&nbsp;Require assistance?
+                    </p>
+                    <p class="subtitle has-text-light">
+                        Here's a list of Student Assistant Coaches currently on duty.
+                        <br>
+                        <small>Please do not hestitate to approach any one of them.</small>
+                    </p>
+                </div>
+                <div class="column has-text-right">
+                    <h1 class="title is-2 has-text-white" id="time-display"></h1>
+                    <p class="subtitle is-4 has-text-light" id="good-day"></p>
+                </div>
+            </div>
+        </div>
+</section>
+
 <section class="section">
-  <div class="container">
-    <div class="columns is-multiline is-centered">
-      <div class="column is-8 has-text-centered">
-        <h2 class="mt-2 mb-4 is-size-1 -mobile has-text-weight-bold has-text-white">People On Shift</h2>
-        <ol class="pt-5">
-            {{#each people}}
-                <li class=" box mt-2 mb-4 is-size-2 -mobile has-text-weight-bold">{{this}}</li>
-                {{else}}
-                <li class=" box mt-2 mb-4 is-size-2 -mobile has-text-weight-bold">No one is on shift</li>
+    <div class="container">
+        <div class="columns is-centered">
+            {{#each sacInfoList}}
+            <div class="column is-one-quarter">
+                <div class="box has-background-dark">
+                    <div class="sacPhoto block" style="background: url('{{this.sacPhoto}}') top no-repeat; background-size: cover"></div>
+                    <p class="title is-3 has-text-centered has-text-white">{{this.sacName}}</p>
+                </div>
+            </div>
+            {{else}}
+            <div class="column has-text-centered mt-6">
+                <p class="is-size-1 has-text-danger-dark"><i class="fas fa-times"></i></p>
+                <p class="title has-text-danger-dark">No SACs currently on duty</p>
+                <p class="subtitle">If you require assistance, please hold.</p>
+                <hr>
+                <div class="block has-text-grey">
+                    <p class="title is-5">MakerSpaceNYP Opening hours:</p>
+                    <p><b>Instruction week:</b> 11:00AM ~ 9:00PM</p>
+                    <p><b>Term &amp; Semester break:</b> 10:00AM ~ 6:00PM</p>
+                </div>
+            </div>
             {{/each}}
-        </ol>
-      </div>
+        </div>
     </div>
-  </div>
 </section>
