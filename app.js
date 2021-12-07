@@ -312,7 +312,7 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
     console.log("req_body: ", req.body);
-    const card_id = req.body.cardID;
+    const card_id = req.body.cardID.toUpperCase();
     (req.body.remarkField == 'others%') ? remark = req.body.otherField : remark = req.body.remarkField;
     isCardIdPresent(
         (cardID = card_id),
