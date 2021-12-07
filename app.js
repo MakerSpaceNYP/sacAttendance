@@ -81,7 +81,7 @@ function isCardIdPresent(cardID, callback, err) {
         })
         .eachPage(function page(records, fetchNextPage) {
             records.forEach(function (record) {
-                if (record.get("Card ID") == cardID) {
+                if (record.get("Card ID").toUpperCase() == cardID) {
                     sacInfoObj["cardID"] = record.get("Card ID");
                     sacInfoObj["recordID"] = record.id;
                     callback(sacInfoObj);
@@ -130,7 +130,7 @@ function isClockedIn(
         .eachPage(function page(records, fetchNextPage) {
             records.some(function (record) {
                 let recordDate = record.get("Check In Date-Time").split("T")[0];
-                if (record.get("Card ID") == cardID) {
+                if (record.get("Card ID").toUpperCase() == cardID) {
                     // Clock Out Success
                     if (
                         recordDate == todayDate &&
