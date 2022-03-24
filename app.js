@@ -79,7 +79,7 @@ function isCardIdPresent(cardID, callback, err) {
         .select({
             view: "Grid view",
         })
-        .eachPage(function page(records, fetchNextPage) {
+        .eachPage(function page(records) {
             records.forEach(function (record) {
                 if (record.get("Card ID").toUpperCase() == cardID) {
                     sacInfoObj["cardID"] = record.get("Card ID");
@@ -94,7 +94,6 @@ function isCardIdPresent(cardID, callback, err) {
                 err();
                 return;
             }
-            fetchNextPage();
         }).catch((err)=>{
             console.log("1: ", err);
         });
@@ -125,9 +124,13 @@ function isClockedIn(
     base("SAC Time Sheet")
         .select({
             view: "Grid view",
+            maxRecords: 20,
+            // Ordering by the "Check In Date-Time" field
             sort: [{ field: "Check In Date-Time", direction: "desc" }],
+            // Returning the "Check In Date-Time" and "Check Out Date-Time" fields
+            
         })
-        .eachPage(function page(records, fetchNextPage) {
+        .eachPage(function page(records) {
             records.some(function (record) {
                 let recordDate = record.get("Check In Date-Time").split("T")[0];
                 if (record.get("Card ID").toUpperCase() == cardID) {
@@ -199,22 +202,22 @@ function isClockedIn(
                         console.log("status: ", record.get('Status'))
                         err(err);
                         return true
-
-
                     }
+
                 } else {
                     count++;
                 }
+
+
             });
 
             //   No records in the SAC Time Sheet yet
             if (count >= records.length) {
-                console.log("Clock In");
+                console.log("No Records Clock In");
                 clockIn();
                 return false;
             }
 
-            fetchNextPage();
         });
 }
 
@@ -242,8 +245,12 @@ function failedToClockOutEmail(){
     base('SAC Time Sheet').select({
         // Selecting the first 3 records in Grid view:
     
-        view: "Grid view"
-    }).eachPage(function page(records, fetchNextPage) {
+        view: "Grid view",
+        maxRecords: 20,
+        // Ordering by the "Check In Date-Time" field
+        sort: [{ field: "Check In Date-Time", direction: "desc" }],
+
+    }).eachPage(function page(records) {
         // This function (`page`) will get called for each page of records.
     
         records.forEach(function(record) {
@@ -288,7 +295,6 @@ function failedToClockOutEmail(){
         // To fetch the next page of records, call `fetchNextPage`.
         // If there are more records, `page` will get called again.
         // If there are no more records, `done` will get called.
-        fetchNextPage();
     
     }, function done(err) {
         if (err) { console.error(err); return; }
