@@ -249,6 +249,7 @@ function failedToClockOutEmail(){
         maxRecords: 20,
         // Ordering by the "Check In Date-Time" field
         sort: [{ field: "Check In Date-Time", direction: "desc" }],
+        filterByFormula: `AND(IS_BEFORE({Check In Date-Time} = 1, TODAY()), {Status} = 'On Shift')`,
 
     }).eachPage(function page(records) {
         // This function (`page`) will get called for each page of records.
