@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app",
     "test": "nodemon app",
-    "build": "netlify-lambda build express",
+    "build": "netlify-lambda build app.js",
     "eslint-setup": "eslint --init",
     "version-up": "node scripts/versioning",
     "pug": "node node_modules/pug-cli/index.js views/ --out ./"
