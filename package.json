@@ -6,10 +6,8 @@
   "scripts": {
     "start": "node app",
     "test": "nodemon app",
-    "build": "netlify-lambda build app.js",
     "eslint-setup": "eslint --init",
-    "version-up": "node scripts/versioning",
-    "pug": "node node_modules/pug-cli/index.js views/ --out ./"
+    "version-up": "node scripts/versioning"
   },
   "repository": {
     "type": "git",
@@ -30,19 +28,11 @@
     "express-handlebars": "^5.2.1",
     "express-rate-limit": "^5.2.6",
     "nodemailer": "^6.5.0",
-    "sendgrid": "^5.2.3",
-    "pug": "^2.0.4",
-    "pug-cli": "^1.0.0-alpha6"
+    "sendgrid": "^5.2.3"
   },
   "devDependencies": {
     "eslint": "^7.20.0",
     "jsonfile": "^6.1.0",
-    "nodemon": "^2.0.7",
-    "body-parser": "^1.18.3",
-    "express": "^4.16.3",
-    "netlify-lambda": "^0.4.0",
-    "pug": "^2.0.4",
-    "pug-cli": "^1.0.0-alpha6",
-    "serverless-http": "^1.6.0"
+    "nodemon": "^2.0.7"
   }
 }
