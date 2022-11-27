@@ -8,7 +8,8 @@
     "test": "nodemon app",
     "build": "netlify-lambda build express",
     "eslint-setup": "eslint --init",
-    "version-up": "node scripts/versioning"
+    "version-up": "node scripts/versioning",
+    "pug": "node node_modules/pug-cli/index.js views/ --out ./"
   },
   "repository": {
     "type": "git",
